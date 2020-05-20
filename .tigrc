@@ -1,0 +1,17 @@
+# set
+set commit-order = default
+
+set main-options = -n 1000
+
+set show-changes = no
+
+set main-view-commit-title-graph = v1
+
+# bind
+bind generic r refresh
+bind status d !@?rm -rf %(file) 
+
+bind generic J next
+bind generic K previous
+bind generic G move-last-line
+bind status A !?git commit --amend
