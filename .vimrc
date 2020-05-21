@@ -1,7 +1,5 @@
 " --settings-------------------------------------------------------
-nnoremap x "_x " 削除キーでyankしない
-nnoremap d "_d
-xnoremap p "_dP
+set lazyredraw " fast
 set clipboard=unnamed " macのクリップボードとyankを共有
 set showmatch " 括弧移動
 set matchtime=1 " 時間短縮
@@ -17,7 +15,6 @@ set hlsearch " 検索文字列をハイライトする
 set ignorecase " 大文字と小文字を区別しない
 set incsearch " インクリメンタルサーチを行う
 set isk+=- " ハイフンをiskeywordに含める
-set lazyredraw " fast
 set ttyfast
 set nobackup " 勝手に作るファイルを無効にする
 set noswapfile
@@ -32,6 +29,8 @@ set laststatus=2 " ステータスラインを常に表示
 set autoindent "改行時に前の行のインデントを継続する"
 
 let mapleader = "\<Space>" " Spaceを割り当て
+
+xnoremap <expr> p 'pgv"'.v:register.'ygv<esc>' " paste時にyankしない
 
 " --カーソル表示-------------------------------------------------------
 if has('vim_starting')
@@ -88,4 +87,12 @@ call plug#begin('~/.vim/plugged')
 
     Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
     Plug 'junegunn/fzf.vim'
+
+    Plug 'joshdick/onedark.vim'
 call plug#end()
+
+
+" --colorscheme------------------------------------------------------
+syntax on
+colorscheme onedark
+
