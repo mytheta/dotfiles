@@ -1,5 +1,5 @@
-# dotsfile
-my dot files
+# dotfiles
+my dotfiles
 
 ## setting
 ```
