@@ -2,6 +2,7 @@ sync:
 	curl -Ss https://raw.githubusercontent.com/gpakosz/.tmux/master/.tmux.conf -o $(PWD)/.tmux.conf
 	mkdir -p ~/.config/git
 	[ -f ~/.vimrc ] || ln -s $(PWD)/.vimrc ~/.vimrc
+	[ -f ~/.ideavimrc ] || ln -s $(PWD)/.ideavimrc ~/.ideavimrc
 	[ -f ~/.bashrc ] || ln -s $(PWD)/.bashrc ~/.bashrc
 	[ -f ~/.zshrc ] || ln -s $(PWD)/.zshrc ~/.zshrc
 	[ -f ~/.zsh_private ] || ln -s $(PWD)/.zsh_private ~/.zsh_private
@@ -14,6 +15,7 @@ sync:
 
 clean:
 	rm -f ~/.vimrc
+	rm -f ~/.ideavimrc
 	rm -f ~/.bashrc
 	rm -f ~/.zshrc
 	rm -f ~/.zsh_private
