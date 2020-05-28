@@ -27,6 +27,7 @@ set wrap " 画面の端で、行を折り返して表示してくれるように
 set backspace=indent,eol,start " インサートモード中の BS、CTRL-W、CTRL-U による文字削除を柔軟にする
 set laststatus=2 " ステータスラインを常に表示
 set autoindent "改行時に前の行のインデントを継続する"
+set binary noeol "file末尾の改行コード削除
 
 let mapleader = "\<Space>" " Spaceを割り当て
 
