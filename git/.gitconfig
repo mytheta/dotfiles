@@ -19,3 +19,5 @@
 	untracked = cyan
 [github]
 	user = mytheta
+[alias]
+	push-f = push --force-with-lease
