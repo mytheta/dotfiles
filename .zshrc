@@ -2,6 +2,7 @@
 #    INIT
 # =============
 [ -r ~/.zsh_private ] && source ~/.zsh_private
+setopt +o nomatch 
 
 
 # =============
