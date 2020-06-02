@@ -12,6 +12,7 @@ sync:
 	[ -f ~/.gitconfig ] || ln -s $(PWD)/git/.gitconfig ~/.gitconfig
 	[ -f ~/.git_commit ] || ln -s $(PWD)/git/.git_commit ~/.git_commit
 	[ -f ~/.config/git/ignore ] || ln -s $(PWD)/git/.gitignore_global ~/.config/git/ignore
+	[ -f ~/.config/starship.toml ] || ln -s $(PWD)/starship.toml ~/.config/starship.toml
 
 clean:
 	rm -f ~/.vimrc
@@ -22,7 +23,8 @@ clean:
 	rm -f ~/.tmux.conf
 	rm -f ~/.tmux.conf.local
 	rm -f ~/.tigrc
-	rm -f ~/.config/git
+	rm -rf ~/.config/git
+	rm -f ~/.config/starship.toml
 	rm -f ~/.git_commit
 	rm -f ~/.gitconfig
 
