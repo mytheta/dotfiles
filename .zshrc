@@ -50,7 +50,7 @@ bindkey '^r' select-history
 #    TMUX
 # ===================
 #tmux起動
-[[ -z "$TMUX" && ! -z "$PS1" ]] && tmux
+[[ -z "$TMUX" && ! -z "$PS1" ]] && tmux -u
 
 #tmuxでemacsのキーバインド
 bindkey -e
