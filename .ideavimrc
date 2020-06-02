@@ -28,15 +28,12 @@ set laststatus=2 " ステータスラインを常に表示
 set autoindent "改行時に前の行のインデントを継続する"
 set binary noeol "file末尾の改行コード削除
 
-let mapleader = "\<Space>" " Spaceを割り当て
 
-xnoremap <expr> p 'pgv"'.v:register.'ygv<esc>' " paste時にyankしない
+let mapleader = " "
+nmap <space> <Leader>
 
-" --カーソル表示-------------------------------------------------------
-if has('vim_starting')
-    let &t_SI .= "\e[6 q"
-    let &t_EI .= "\e[2 q"
-    let &t_SR .= "\e[4 q"
-endif
+nnoremap / :action Find<CR>
+nnoremap <Leader>r :action RenameElement<CR>
+nnoremap <Leader>u :action ShowUsages<CR>
 
-
+nnoremap <Esc><Esc> :nohlsearch<CR><ESC>
