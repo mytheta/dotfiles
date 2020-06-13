@@ -26,6 +26,16 @@ setopt EXTENDED_HISTORY
 
 
 # ===================
+#    TMUX
+# ===================
+#tmux起動
+[[ -z "$TMUX" && ! -z "$PS1" ]] && tmux -u
+
+#tmuxでemacsのキーバインド
+bindkey -e
+
+
+# ===================
 #    PLUGINS
 # ===================
 ##lika a fish syntax-highright
@@ -45,15 +55,6 @@ function select-history() {
 zle -N select-history
 bindkey '^r' select-history
 
-
-# ===================
-#    TMUX
-# ===================
-#tmux起動
-[[ -z "$TMUX" && ! -z "$PS1" ]] && tmux -u
-
-#tmuxでemacsのキーバインド
-bindkey -e
 
 
 # =============
