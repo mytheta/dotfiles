@@ -37,3 +37,8 @@ nnoremap <Leader>r :action RenameElement<CR>
 nnoremap <Leader>u :action ShowUsages<CR>
 
 nnoremap <Esc><Esc> :nohlsearch<CR><ESC>
+
+set easymotion
+nmap <Leader>f <Plug>(easymotion-bd-f2)
+xmap <Leader>f <Plug>(easymotion-bd-f2)
+omap <Leader>f <Plug>(easymotion-bd-f2)
