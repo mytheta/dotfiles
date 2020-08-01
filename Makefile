@@ -1,4 +1,5 @@
 sync:
+	curl -fLo ~/.vim/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 	curl -Ss https://raw.githubusercontent.com/gpakosz/.tmux/master/.tmux.conf -o $(PWD)/.tmux.conf
 	mkdir -p ~/.config/git
 	[ -f ~/.vimrc ] || ln -s $(PWD)/.vimrc ~/.vimrc
@@ -27,6 +28,7 @@ clean:
 	rm -f ~/.config/starship.toml
 	rm -f ~/.git_commit
 	rm -f ~/.gitconfig
+	rm -rf ~/.vim
 
 brew:
 	brew bundle

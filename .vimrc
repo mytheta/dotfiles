@@ -77,6 +77,9 @@ call plug#begin('~/.vim/plugged')
     Plug 'mattn/vim-lsp-settings'
     Plug 'mattn/vim-lsp-icons'
 
+		Plug 'mattn/vim-goimports'
+		Plug 'vim-jp/vim-go-extra'
+
     Plug 'hrsh7th/vim-vsnip'
     Plug 'hrsh7th/vim-vsnip-integ'
 
@@ -89,11 +92,14 @@ call plug#begin('~/.vim/plugged')
     Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
     Plug 'junegunn/fzf.vim'
 
-    Plug 'joshdick/onedark.vim'
+		Plug 'tomasr/molokai'
 call plug#end()
 
 
 " --colorscheme------------------------------------------------------
 syntax on
-colorscheme onedark
+colorscheme molokai
 
+
+" --golang-syntax------------------------------------------------------
+autocmd FileType go autocmd BufWritePre <buffer> Fmt
