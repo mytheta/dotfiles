@@ -21,3 +21,5 @@
 	user = mytheta
 [alias]
 	push-f = push --force-with-lease
+[pull] 
+	rebase = true
