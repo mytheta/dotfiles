@@ -39,6 +39,7 @@ nnoremap <Leader>u :action ShowUsages<CR>
 nnoremap <Esc><Esc> :nohlsearch<CR><ESC>
 
 set easymotion
-nmap <Leader>f <Plug>(easymotion-bd-f2)
-xmap <Leader>f <Plug>(easymotion-bd-f2)
-omap <Leader>f <Plug>(easymotion-bd-f2)
+nmap <Leader>a <Plug>(easymotion-bd-f2)
+xmap <Leader>a <Plug>(easymotion-bd-f2)
+omap <Leader>a <Plug>(easymotion-bd-f2)
+nnoremap <Leader>f :<C-u>action GotoFile<CR>
