@@ -1,4 +1,1 @@
-# autoload -Uz compinit
-# compinit
-#
-# source ~/.zshrc
+autoload -Uz compinit

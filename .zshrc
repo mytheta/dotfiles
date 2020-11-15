@@ -88,7 +88,7 @@ alias gsm='git for-each-ref refs/heads/ "--format=%(refname:short)" | while read
 alias cat='ccat'
 alias ee='exit'
 alias t='tig status'
-alias g='gcd'
+alias gh='gcd'
 
 
 # =============
@@ -98,4 +98,6 @@ eval "$(starship init zsh)"
 # Customize to your needs...(ターミナルが青くて見にくいので直す)
 export CLICOLOR=1
 export LSCOLORS=DxGxcxdxCxegedabagacad
+
+
 
