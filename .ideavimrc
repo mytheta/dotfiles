@@ -35,6 +35,7 @@ nmap <space> <Leader>
 nnoremap / :action Find<CR>
 nnoremap <Leader>r :action RenameElement<CR>
 nnoremap <Leader>u :action ShowUsages<CR>
+nnoremap <Leader>t :action RunClass<CR>
 
 nnoremap <Esc><Esc> :nohlsearch<CR><ESC>
 
