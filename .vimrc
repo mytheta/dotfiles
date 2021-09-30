@@ -46,6 +46,8 @@ nnoremap <Leader>b :Buffers<CR>
 nnoremap <Leader>f :Files<CR>
 nnoremap <Leader>l :BLines<CR>
 
+" fileからディレクトリに戻る-----------------------------------------
+nnoremap - :<C-u>e %:h<Cr>
 
 " -- markdown settings-----------------------------------------------
 autocmd BufRead,BufNewFile *.mkd  set filetype=markdown
@@ -83,7 +85,8 @@ call plug#begin('~/.vim/plugged')
     Plug 'hrsh7th/vim-vsnip'
     Plug 'hrsh7th/vim-vsnip-integ'
 
-    Plug 'justinmk/vim-dirvish'
+		Plug 'mattn/vim-molder'
+		Plug 'mattn/vim-molder-operations'
 
     Plug  'tpope/vim-markdown'
     Plug  'kannokanno/previm'
@@ -95,6 +98,9 @@ call plug#begin('~/.vim/plugged')
     Plug 'airblade/vim-gitgutter'
 
 		Plug 'tomasr/molokai'
+
+		Plug 'cappyzawa/starlark.vim'
+		Plug 'vmware-tanzu/ytt.vim'
 call plug#end()
 
 
@@ -105,3 +111,7 @@ colorscheme molokai
 
 " --golang-syntax------------------------------------------------------
 autocmd FileType go autocmd BufWritePre <buffer> Fmt
+
+
+" --mattn/vim-molder------------------------------------------------------
+let g:molder_show_hidden = 1
