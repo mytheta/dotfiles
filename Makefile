@@ -1,6 +1,5 @@
 sync:
 	curl -fLo ~/.vim/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-	curl -Ss https://raw.githubusercontent.com/gpakosz/.tmux/master/.tmux.conf -o $(PWD)/.tmux.conf
 	mkdir -p ~/.config/git
 	[ -f ~/.vimrc ] || ln -s $(PWD)/.vimrc ~/.vimrc
 	[ -f ~/.ideavimrc ] || ln -s $(PWD)/.ideavimrc ~/.ideavimrc
@@ -8,7 +7,6 @@ sync:
 	[ -f ~/.zshrc ] || ln -s $(PWD)/.zshrc ~/.zshrc
 	[ -f ~/.zsh_private ] || ln -s $(PWD)/.zsh_private ~/.zsh_private
 	[ -f ~/.tmux.conf ] || ln -s $(PWD)/.tmux.conf ~/.tmux.conf
-	[ -f ~/.tmux.conf.local ] || ln -s $(PWD)/.tmux.conf.local ~/.tmux.conf.local
 	[ -f ~/.tigrc ] || ln -s $(PWD)/tigrc ~/.tigrc
 	[ -f ~/.gitconfig ] || ln -s $(PWD)/git/.gitconfig ~/.gitconfig
 	[ -f ~/.git_commit ] || ln -s $(PWD)/git/.git_commit ~/.git_commit
