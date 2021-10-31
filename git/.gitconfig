@@ -23,3 +23,9 @@
 	push-f = push --force-with-lease
 [pull] 
 	rebase = true
+[tig "bind"]
+	diff = F ?!git commit --fixup %(commit)
+	diff = S ?!git rebase -i --autosquash %(commit)
+	main = F ?!git commit --fixup %(commit)
+	main = S ?!git rebase -i --autosquash %(commit)
+
