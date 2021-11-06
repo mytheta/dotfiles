@@ -66,8 +66,8 @@ alias ....='cd ../../..'
 alias .....='cd ../../../..'
 alias d='dirs -v | head -10'
   
-alias ls='ls -G'
-alias la='ls -la'
+alias ls='exa -G'
+alias la='exa -la'
 
 alias vi='vim'
 
