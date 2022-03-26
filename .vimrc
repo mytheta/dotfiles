@@ -6,9 +6,8 @@ set matchtime=1 " 時間短縮
 set autoread " 開いているがvim上で変更のないファイルについて、外部で変更があった時に自動的に読み込む
 set enc=utf8 " utf8
 set fenc=utf-8 " utf8にエンコード
-set expandtab " tabをスペース2にし、スペースに変換
-set shiftwidth=0
-set tabstop=2
+set shiftwidth=4
+set tabstop=4
 set hidden " 保存されていないファイルがあるときでも別のファイルを開くことが出来る
 set history=100 " コマンドラインの履歴を100件保存する
 set hlsearch " 検索文字列をハイライトする
@@ -28,6 +27,8 @@ set backspace=indent,eol,start " インサートモード中の BS、CTRL-W、CT
 set laststatus=2 " ステータスラインを常に表示
 set autoindent "改行時に前の行のインデントを継続する"
 set binary noeol "file末尾の改行コード削除
+set list
+set listchars=tab:»-,trail:-,eol:↲,extends:»,precedes:«,nbsp:%
 
 let mapleader = "\<Space>" " Spaceを割り当て
 
@@ -35,10 +36,17 @@ xnoremap <expr> p 'pgv"'.v:register.'ygv<esc>' " paste時にyankしない
 
 " --カーソル表示-------------------------------------------------------
 if has('vim_starting')
-    let &t_SI .= "\e[6 q"
+	let &t_SI .= "\e[6 q"
     let &t_EI .= "\e[2 q"
     let &t_SR .= "\e[4 q"
 endif
+
+" --カッコ自動保管-------------------------------------------------------
+inoremap { {}<LEFT>
+inoremap [ []<LEFT>
+inoremap ( ()<LEFT>
+inoremap " ""<LEFT>
+inoremap ' ''<LEFT>
 
 
 " --fzfのショートカットキー---------------------------------------------
@@ -48,15 +56,6 @@ nnoremap <Leader>l :BLines<CR>
 
 " fileからディレクトリに戻る-----------------------------------------
 nnoremap - :<C-u>e %:h<Cr>
-
-" -- markdown settings-----------------------------------------------
-autocmd BufRead,BufNewFile *.mkd  set filetype=markdown
-autocmd BufRead,BufNewFile *.md  set filetype=markdown
-" Need: kannokanno/previm
-nnoremap <silent> <C-p> :PrevimOpen<CR> " Ctrl-pでプレビュー
-" 自動で折りたたまないようにする
-let g:vim_markdown_folding_disabled=1
-let g:previm_enable_realtime = 1
 
 
 " --lsp--------------------------------------------------------------
@@ -79,28 +78,24 @@ call plug#begin('~/.vim/plugged')
     Plug 'mattn/vim-lsp-settings'
     Plug 'mattn/vim-lsp-icons'
 
-		Plug 'mattn/vim-goimports'
-		Plug 'vim-jp/vim-go-extra'
+	Plug 'mattn/vim-goimports'
+	Plug 'vim-jp/vim-go-extra'
 
     Plug 'hrsh7th/vim-vsnip'
     Plug 'hrsh7th/vim-vsnip-integ'
 
-		Plug 'mattn/vim-molder'
-		Plug 'mattn/vim-molder-operations'
-
-    Plug  'tpope/vim-markdown'
-    Plug  'kannokanno/previm'
-    Plug  'tyru/open-browser.vim'
+	Plug 'mattn/vim-molder'
+	Plug 'mattn/vim-molder-operations'
 
     Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
     Plug 'junegunn/fzf.vim'
 
     Plug 'airblade/vim-gitgutter'
 
-		Plug 'tomasr/molokai'
+	Plug 'tomasr/molokai'
 
-		Plug 'cappyzawa/starlark.vim'
-		Plug 'vmware-tanzu/ytt.vim'
+	Plug 'cappyzawa/starlark.vim'
+	Plug 'vmware-tanzu/ytt.vim'
 call plug#end()
 
 
@@ -109,9 +104,13 @@ syntax on
 colorscheme molokai
 
 
-" --golang-syntax------------------------------------------------------
+" --golang-syntax----------------------------------------------------
 autocmd FileType go autocmd BufWritePre <buffer> Fmt
 
 
-" --mattn/vim-molder------------------------------------------------------
+" --mattn/vim-molder-------------------------------------------------
 let g:molder_show_hidden = 1
+
+" --airblade/vim-gitgutter-------------------------------------------------
+set updatetime=250
+"

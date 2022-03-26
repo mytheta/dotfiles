@@ -7,8 +7,6 @@ set autoread " 開いているがvim上で変更のないファイルについ�
 set enc=utf8 " utf8
 set fenc=utf-8 " utf8にエンコード
 set expandtab " tabをスペース2にし、スペースに変換
-set shiftwidth=0
-set tabstop=2
 set hidden " 保存されていないファイルがあるときでも別のファイルを開くことが出来る
 set history=100 " コマンドラインの履歴を100件保存する
 set hlsearch " 検索文字列をハイライトする
@@ -27,6 +25,11 @@ set backspace=indent,eol,start " インサートモード中の BS、CTRL-W、CT
 set laststatus=2 " ステータスラインを常に表示
 set autoindent "改行時に前の行のインデントを継続する"
 set binary noeol "file末尾の改行コード削除
+set shiftwidth=4
+set tabstop=4
+set list
+set listchars=tab:»-,trail:-,eol:↲,extends:»,precedes:«,nbsp:%
+
 
 
 let mapleader = " "
