@@ -1,3 +1,8 @@
+
+#### FIG ENV VARIABLES ####
+# Please make sure this block is at the start of this file.
+[ -s ~/.fig/shell/pre.sh ] && source ~/.fig/shell/pre.sh
+#### END FIG ENV VARIABLES ####
 # =============
 #    INIT
 # =============
@@ -88,7 +93,7 @@ alias gsm='git for-each-ref refs/heads/ "--format=%(refname:short)" | while read
 alias cat='ccat'
 alias ee='exit'
 alias t='tig status'
-alias gh='gcd'
+alias gl='gcd'
 
 
 # =============
@@ -98,6 +103,3 @@ eval "$(starship init zsh)"
 # Customize to your needs...(ターミナルが青くて見にくいので直す)
 export CLICOLOR=1
 export LSCOLORS=DxGxcxdxCxegedabagacad
-
-
-
