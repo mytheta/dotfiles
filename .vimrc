@@ -42,11 +42,12 @@ if has('vim_starting')
 endif
 
 ""
-"" * fzfのショートカットキー
+"" * fzf
 ""
 nnoremap <Leader>b :Buffers<CR>
 nnoremap <Leader>f :Files<CR>
 nnoremap <Leader>l :BLines<CR>
+let $FZF_DEFAULT_COMMAND="rg --files --hidden -g '!.git/**' -g '!bazel-server'"
 
 ""
 "" * fileからディレクトリに戻る
@@ -86,14 +87,16 @@ call plug#begin('~/.vim/plugged')
 	Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 	Plug 'junegunn/fzf.vim'
 
-	Plug 'airblade/vim-gitgutter'
-
 	Plug 'tomasr/molokai'
 
 	Plug 'cappyzawa/starlark.vim'
 	Plug 'vmware-tanzu/ytt.vim'
+	Plug 'uarun/vim-protobuf'
 
 	Plug 'vim-test/vim-test'
+	Plug 'preservim/vimux'
+
+	Plug 'hashivim/vim-terraform'
 
 	Plug 'cohama/lexima.vim'
 
@@ -102,6 +105,10 @@ call plug#begin('~/.vim/plugged')
 
 	Plug 'vim-airline/vim-airline'
 	Plug 'vim-airline/vim-airline-themes'
+
+	Plug 'k0kubun/vim-open-github'
+	Plug 'APZelos/blamer.nvim'
+	Plug 'airblade/vim-gitgutter'
 call plug#end()
 
 
@@ -123,7 +130,7 @@ autocmd FileType go autocmd BufWritePre <buffer> Fmt
 ""
 highlight link LspWarningHighlight Error
 " Hide signcolumn.
-let g:lsp_diagnostics_signs_enabled = 0"
+let g:lsp_diagnostics_signs_enabled = 0
 " Show diagnostics message to status line
 let g:lsp_diagnostics_echo_cursor = 1
 
@@ -142,6 +149,7 @@ set signcolumn=yes
 "" * vim-test/vim-test
 ""
 nmap <silent> <leader>t :TestNearest<CR>
+let test#strategy = "vimux"
 
 ""
 "" * vim-vsnip
