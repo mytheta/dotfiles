@@ -5,12 +5,14 @@ set show-changes = no
 set main-view-commit-title-graph = v1
 
 # bind
-bind generic r refresh
-bind status d !@?rm -rf %(file) 
-
+bind generic R refresh
 bind generic J next
 bind generic K previous
 bind generic G move-last-line
-bind status a !?git commit --amend
 
-bind branch n !?@git branch -d %(branch)
+bind branch n !?@git switch -c %(prompt)
+bind branch L !git pull origin %(branch)
+
+bind status a !?git commit --amend
+bind status P !git push
+bind status d !@?rm -rf %(file) 
