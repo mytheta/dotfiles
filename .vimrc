@@ -33,6 +33,11 @@ let mapleader = "\<Space>" " Spaceを割り当て
 xnoremap <expr> p 'pgv"'.v:register.'ygv<esc>' " paste時にyankしない
 
 ""
+"" * その他割り当て
+""
+nmap <silent> tt :vert botright term ++close tig status<CR>
+
+""
 "" * カーソル表示
 ""
 if has('vim_starting')
@@ -62,6 +67,7 @@ nmap <silent> <Leader>r :LspRename<CR>
 nmap <silent> <Leader>T :LspTypeDefinition<CR>
 nmap <silent> <Leader>i :LspImplementation<CR>
 nmap <silent> <Leader>a :LspCodeAction<CR>
+nmap <silent> rr :LspReferences<CR>
 let g:lsp_diagnostics_enabled = 1
 let g:lsp_diagnostics_echo_cursor = 1
 let g:asyncomplete_popup_delay = 200
@@ -105,10 +111,15 @@ call plug#begin('~/.vim/plugged')
 
 	Plug 'vim-airline/vim-airline'
 	Plug 'vim-airline/vim-airline-themes'
+	Plug 'tpope/vim-fugitive' " status barにgit branchを表示させるため
 
 	Plug 'k0kubun/vim-open-github'
 	Plug 'APZelos/blamer.nvim'
 	Plug 'airblade/vim-gitgutter'
+
+	Plug 'tpope/vim-commentary' " gccでコメントアウトできるようにする
+
+	Plug 'iberianpig/tig-explorer.vim' " vimからtigを開く
 call plug#end()
 
 
@@ -154,8 +165,6 @@ let test#strategy = "vimux"
 ""
 "" * vim-vsnip
 ""
-imap <expr> <C-j>   vsnip#expandable()  ? '<Plug>(vsnip-expand)' : '<C-j>'
-smap <expr> <C-j>   vsnip#expandable()  ? '<Plug>(vsnip-expand)' : '<C-j>'
 imap <expr> <C-l>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
 let g:lsp_settings = {
   \   'gopls': {
