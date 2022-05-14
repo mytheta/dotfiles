@@ -60,21 +60,6 @@ let $FZF_DEFAULT_COMMAND="rg --files --hidden -g '!.git/**' -g '!bazel-server'"
 nnoremap - :<C-u>e %:h<Cr>
 
 ""
-"" * lsp
-""
-nmap <silent> <Leader>d :LspDefinition<CR>
-nmap <silent> <Leader>r :LspRename<CR>
-nmap <silent> <Leader>T :LspTypeDefinition<CR>
-nmap <silent> <Leader>i :LspImplementation<CR>
-nmap <silent> <Leader>a :LspCodeAction<CR>
-nmap <silent> rr :LspReferences<CR>
-let g:lsp_diagnostics_enabled = 1
-let g:lsp_diagnostics_echo_cursor = 1
-let g:asyncomplete_popup_delay = 200
-let g:lsp_text_edit_enabled = 0
-
-
-""
 "" * vim-plugin
 ""
 call plug#begin('~/.vim/plugged')
@@ -135,15 +120,24 @@ colorscheme molokai
 ""
 autocmd FileType go autocmd BufWritePre <buffer> Fmt
 
+""
+"" * lsp
+""
+nmap <silent> <Leader>d :LspDefinition<CR>
+nmap <silent> <Leader>r :LspRename<CR>
+nmap <silent> <Leader>T :LspTypeDefinition<CR>
+nmap <silent> <Leader>i :LspImplementation<CR>
+nmap <silent> <Leader>a :LspCodeAction<CR>
+nmap <silent> rr :LspReferences<CR>
+" let g:lsp_diagnostics_enabled = 1
+" let g:lsp_diagnostics_echo_cursor = 1 " Show diagnostics message to status line
+" let g:asyncomplete_popup_delay = 200
+" let g:lsp_text_edit_enabled = 0
 
 ""
 "" * mattn/vim-lsp-settings
 ""
 highlight link LspWarningHighlight Error
-" Hide signcolumn.
-let g:lsp_diagnostics_signs_enabled = 0
-" Show diagnostics message to status line
-let g:lsp_diagnostics_echo_cursor = 1
 
 ""
 "" * mattn/vim-molder

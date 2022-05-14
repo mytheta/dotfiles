@@ -69,7 +69,7 @@ alias d='dirs -v | head -10'
 alias ls='exa -G'
 alias la='exa -la'
 
-alias vi='vim'
+alias vi='nvim'
 
 alias dk='docker'
 alias dps='docker ps'
