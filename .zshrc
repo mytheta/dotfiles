@@ -70,6 +70,7 @@ alias ls='exa -G'
 alias la='exa -la'
 
 alias vi='nvim'
+alias vim='nvim'
 
 alias dk='docker'
 alias dps='docker ps'

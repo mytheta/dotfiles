@@ -20,7 +20,7 @@ set ttyfast
 set nobackup " 勝手に作るファイルを無効にする
 set noswapfile
 set number " 行番号の表示
-set showcmd " 入力中のコマンドを右下に表示する
+set noruler " 右下に表示されるやつを消す
 set visualbell " ビープ音を消す
 set wildmenu " ファイル名補完
 set wildmode=full
@@ -33,9 +33,9 @@ let mapleader = "\<Space>" " Spaceを割り当て
 xnoremap <expr> p 'pgv"'.v:register.'ygv<esc>' " paste時にyankしない
 
 ""
-"" * その他割り当て
+"" * tig
 ""
-nmap <silent> tt :vert botright term ++close tig status<CR>
+nmap <silent> tt :TigStatus<CR>
 
 ""
 "" * カーソル表示
@@ -57,56 +57,75 @@ let $FZF_DEFAULT_COMMAND="rg --files --hidden -g '!.git/**' -g '!bazel-server'"
 ""
 "" * fileからディレクトリに戻る
 ""
-nnoremap - :<C-u>e %:h<Cr>
+nnoremap - :<C-u>e %:h<CR>
 
 ""
 "" * vim-plugin
 ""
 call plug#begin('~/.vim/plugged')
+	" lsp
 	Plug 'prabirshrestha/async.vim'
 	Plug 'prabirshrestha/asyncomplete.vim'
 	Plug 'prabirshrestha/asyncomplete-lsp.vim'
 	Plug 'prabirshrestha/vim-lsp'
 	Plug 'mattn/vim-lsp-settings'
 
+	" go
 	Plug 'mattn/vim-goimports'
 	Plug 'vim-jp/vim-go-extra'
+	" terraform
+	Plug 'hashivim/vim-terraform'
+	" ytt
+	Plug 'cappyzawa/starlark.vim'
+	Plug 'vmware-tanzu/ytt.vim'
+	" protobuf
+	Plug 'uarun/vim-protobuf'
 
+	" filer
 	Plug 'mattn/vim-molder'
 	Plug 'mattn/vim-molder-operations'
 
+	" fzf
 	Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 	Plug 'junegunn/fzf.vim'
 
+	" thema
 	Plug 'tomasr/molokai'
 
-	Plug 'cappyzawa/starlark.vim'
-	Plug 'vmware-tanzu/ytt.vim'
-	Plug 'uarun/vim-protobuf'
-
+	" test
 	Plug 'vim-test/vim-test'
 	Plug 'preservim/vimux'
 
-	Plug 'hashivim/vim-terraform'
-
+	" 閉じかっこ補完
 	Plug 'cohama/lexima.vim'
 
+	" スニペット
 	Plug 'hrsh7th/vim-vsnip'
 	Plug 'hrsh7th/vim-vsnip-integ'
 
+	" status bar
 	Plug 'vim-airline/vim-airline'
 	Plug 'vim-airline/vim-airline-themes'
 	Plug 'tpope/vim-fugitive' " status barにgit branchを表示させるため
 
-	Plug 'k0kubun/vim-open-github'
+	" git
+	Plug 'tyru/open-browser.vim'
+	Plug 'tyru/open-browser-github.vim'
 	Plug 'APZelos/blamer.nvim'
 	Plug 'airblade/vim-gitgutter'
+	Plug 'iberianpig/tig-explorer.vim' " vimからtigを開く
+	Plug 'rbgrouleff/bclose.vim'
 
 	Plug 'tpope/vim-commentary' " gccでコメントアウトできるようにする
-
-	Plug 'iberianpig/tig-explorer.vim' " vimからtigを開く
+	Plug 'unblevable/quick-scope' " 横移動をいい感じにする
+	Plug 'terryma/vim-expand-region' " 選択範囲をいい感じにする
 call plug#end()
 
+""
+"" * terryma/vim-expand-region
+""
+map K <Plug>(expand_region_expand)
+map J <Plug>(expand_region_shrink)
 
 ""
 "" * colorscheme
@@ -179,9 +198,18 @@ inoremap <expr> <cr> pumvisible() ? asyncomplete#close_popup() . "\<cr>" : "\<cr
 ""
 "" * vim-airline/vim-airline
 ""
+let g:airline_theme='violet' 
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_statusline_ontop = 1
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#buffer_nr_show = 1
-let g:airline_theme='violet' 
+" remove the right part
+let g:airline_section_x=''
+let g:airline_section_y=''
+let g:airline_section_z=''
+let g:airline#extensions#whitespace#enabled = 0
+" remove separators for empty sections
+let g:airline_skip_empty_sections = 1
 autocmd VimEnter * set laststatus=0
+
+let g:tig_explorer_keymap_vsplit  = '<C-v>'
