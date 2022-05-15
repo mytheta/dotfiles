@@ -148,10 +148,9 @@ nmap <silent> <Space>T :LspTypeDefinition<CR>
 nmap <silent> <Space>i :LspImplementation<CR>
 nmap <silent> <Space>a :LspCodeAction<CR>
 nmap <silent> rr :LspReferences<CR>
-" let g:lsp_diagnostics_enabled = 1
-" let g:lsp_diagnostics_echo_cursor = 1 " Show diagnostics message to status line
-" let g:asyncomplete_popup_delay = 200
-" let g:lsp_text_edit_enabled = 0
+let g:lsp_diagnostics_enabled = 1
+let g:lsp_diagnostics_echo_cursor = 1 " Show diagnostics message to status line
+let g:asyncomplete_popup_delay = 200
 
 ""
 "" * mattn/vim-lsp-settings
