@@ -29,7 +29,7 @@ set backspace=indent,eol,start " インサートモード中の BS、CTRL-W、CT
 set autoindent "改行時に前の行のインデントを継続する"
 set list
 set listchars=tab:»-,trail:-,extends:»,precedes:«,nbsp:%
-let mapleader = "\<Space>" " Spaceを割り当て
+"let mapleader = "\<Space>" " Spaceを割り当て
 xnoremap <expr> p 'pgv"'.v:register.'ygv<esc>' " paste時にyankしない
 
 ""
@@ -49,9 +49,9 @@ endif
 ""
 "" * fzf
 ""
-nnoremap <Leader>b :Buffers<CR>
-nnoremap <Leader>f :Files<CR>
-nnoremap <Leader>l :BLines<CR>
+nnoremap <Space>b :Buffers<CR>
+nnoremap <Space>f :Files<CR>
+nnoremap <Space>l :BLines<CR>
 let $FZF_DEFAULT_COMMAND="rg --files --hidden -g '!.git/**' -g '!bazel-server'"
 
 ""
@@ -142,11 +142,11 @@ autocmd FileType go autocmd BufWritePre <buffer> Fmt
 ""
 "" * lsp
 ""
-nmap <silent> <Leader>d :LspDefinition<CR>
-nmap <silent> <Leader>r :LspRename<CR>
-nmap <silent> <Leader>T :LspTypeDefinition<CR>
-nmap <silent> <Leader>i :LspImplementation<CR>
-nmap <silent> <Leader>a :LspCodeAction<CR>
+nmap <silent> <Space>d :LspDefinition<CR>
+nmap <silent> <Space>r :LspRename<CR>
+nmap <silent> <Space>T :LspTypeDefinition<CR>
+nmap <silent> <Space>i :LspImplementation<CR>
+nmap <silent> <Space>a :LspCodeAction<CR>
 nmap <silent> rr :LspReferences<CR>
 " let g:lsp_diagnostics_enabled = 1
 " let g:lsp_diagnostics_echo_cursor = 1 " Show diagnostics message to status line
@@ -172,7 +172,7 @@ set signcolumn=yes
 ""
 "" * vim-test/vim-test
 ""
-nmap <silent> <leader>t :TestNearest<CR>
+nmap <silent> <Space>t :TestNearest<CR>
 let test#strategy = "vimux"
 
 ""
@@ -203,7 +203,7 @@ let g:airline#extensions#tabline#enabled = 1
 let g:airline_statusline_ontop = 1
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#buffer_nr_show = 1
-" remove the right part
+let g:airline_section_b='%{airline#extensions#branch#get_head()}'
 let g:airline_section_x=''
 let g:airline_section_y=''
 let g:airline_section_z=''
