@@ -29,30 +29,16 @@ set backspace=indent,eol,start " インサートモード中の BS、CTRL-W、CT
 set autoindent "改行時に前の行のインデントを継続する"
 set list
 set listchars=tab:»-,trail:-,extends:»,precedes:«,nbsp:%
-"let mapleader = "\<Space>" " Spaceを割り当て
 xnoremap <expr> p 'pgv"'.v:register.'ygv<esc>' " paste時にyankしない
 
 ""
-"" * tig
-""
-nmap <silent> tt :TigStatus<CR>
-
-""
-"" * カーソル表示
+"" * 挿入モードで縦棒カーソル表示(vimの時)
 ""
 if has('vim_starting')
 	let &t_SI .= "\e[6 q"
 	let &t_EI .= "\e[2 q"
 	let &t_SR .= "\e[4 q"
 endif
-
-""
-"" * fzf
-""
-nnoremap <Space>b :Buffers<CR>
-nnoremap <Space>f :Files<CR>
-nnoremap <Space>l :BLines<CR>
-let $FZF_DEFAULT_COMMAND="rg --files --hidden -g '!.git/**' -g '!bazel-server'"
 
 ""
 "" * fileからディレクトリに戻る
@@ -70,17 +56,6 @@ call plug#begin('~/.vim/plugged')
 	Plug 'prabirshrestha/vim-lsp'
 	Plug 'mattn/vim-lsp-settings'
 
-	" go
-	Plug 'mattn/vim-goimports'
-	Plug 'vim-jp/vim-go-extra'
-	" terraform
-	Plug 'hashivim/vim-terraform'
-	" ytt
-	Plug 'cappyzawa/starlark.vim'
-	Plug 'vmware-tanzu/ytt.vim'
-	" protobuf
-	Plug 'uarun/vim-protobuf'
-
 	" filer
 	Plug 'mattn/vim-molder'
 	Plug 'mattn/vim-molder-operations'
@@ -89,16 +64,10 @@ call plug#begin('~/.vim/plugged')
 	Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 	Plug 'junegunn/fzf.vim'
 
-	" thema
-	Plug 'tomasr/molokai'
-
 	" test
 	Plug 'vim-test/vim-test'
 	Plug 'preservim/vimux'
-
-	" 閉じかっこ補完
-	Plug 'cohama/lexima.vim'
-
+	
 	" スニペット
 	Plug 'hrsh7th/vim-vsnip'
 	Plug 'hrsh7th/vim-vsnip-integ'
@@ -116,10 +85,32 @@ call plug#begin('~/.vim/plugged')
 	Plug 'iberianpig/tig-explorer.vim' " vimからtigを開く
 	Plug 'rbgrouleff/bclose.vim'
 
+	" etc
 	Plug 'tpope/vim-commentary' " gccでコメントアウトできるようにする
 	Plug 'unblevable/quick-scope' " 横移動をいい感じにする
 	Plug 'terryma/vim-expand-region' " 選択範囲をいい感じにする
+	Plug 'cohama/lexima.vim' " 閉じかっこ補完
+	Plug 'tomasr/molokai' " color thema
+
+	" go
+	Plug 'mattn/vim-goimports'
+	Plug 'vim-jp/vim-go-extra'
+	" terraform
+	Plug 'hashivim/vim-terraform'
+	" ytt
+	Plug 'cappyzawa/starlark.vim'
+	Plug 'vmware-tanzu/ytt.vim'
+	" protobuf
+	Plug 'uarun/vim-protobuf'
 call plug#end()
+
+""
+"" * fzf
+""
+nnoremap <Space>b :Buffers<CR>
+nnoremap <Space>f :Files<CR>
+nnoremap <Space>l :BLines<CR>
+let $FZF_DEFAULT_COMMAND="rg --files --hidden -g '!.git/**' -g '!bazel-server'"
 
 ""
 "" * terryma/vim-expand-region
@@ -132,7 +123,6 @@ map J <Plug>(expand_region_shrink)
 ""
 syntax on
 colorscheme molokai
-
 
 ""
 "" * golang-syntax
@@ -186,7 +176,6 @@ let g:lsp_settings = {
   \   },
   \ }
 
-
 ""
 "" * prabirshrestha/asyncomplete.vim
 ""
@@ -211,4 +200,7 @@ let g:airline#extensions#whitespace#enabled = 0
 let g:airline_skip_empty_sections = 1
 autocmd VimEnter * set laststatus=0
 
-let g:tig_explorer_keymap_vsplit  = '<C-v>'
+""
+"" * tig
+""
+nmap <silent> tt :TigStatus<CR>
