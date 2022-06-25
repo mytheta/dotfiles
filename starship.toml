@@ -6,7 +6,7 @@ right_format = "$time"
 
 # Replace the "❯" symbol in the prompt with "➜"
 [character]      # The name of the module we are configuring is "character"
-success_symbol = "➜"     # The "symbol" segment is being set to "➜"
+success_symbol = ">"     # The "symbol" segment is being set to "➜"
 
 # Disable the package module, hiding it from the prompt completely
 [package]
@@ -24,4 +24,14 @@ style = "bold bright-black"
 format = "[$time]($style)"
 
 [line_break]
+disabled = true
+
+[git_status]
+disabled = true
+
+[git_branch]
+symbol = "🌱 "
+format = "[$symbol$branch(:$remote_branch)]($style) "
+
+[gcloud]
 disabled = true
