@@ -13,7 +13,6 @@ set tabstop=4
 set hidden " 保存されていないファイルがあるときでも別のファイルを開くことが出来る
 set history=100 " コマンドラインの履歴を100件保存する
 set hlsearch " 検索文字列をハイライトする
-set ignorecase " 大文字と小文字を区別しない
 set incsearch " インクリメンタルサーチを行う
 set isk+=- " ハイフンをiskeywordに含める
 set ttyfast
@@ -63,6 +62,9 @@ call plug#begin('~/.vim/plugged')
 	" fzf
 	Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 	Plug 'junegunn/fzf.vim'
+	
+	" vim-ripgrep
+	Plug 'jremmen/vim-ripgrep'
 
 	" test
 	Plug 'vim-test/vim-test'
@@ -109,8 +111,13 @@ call plug#end()
 ""
 nnoremap <Space>b :Buffers<CR>
 nnoremap <Space>f :Files<CR>
-nnoremap <Space>l :BLines<CR>
 let $FZF_DEFAULT_COMMAND="rg --files --hidden -g '!.git/**' -g '!bazel-server'"
+command! -bang -nargs=* Ag call fzf#vim#ag(<q-args>, {'options': '--delimiter : --nth 4..'}, <bang>0) "ファイルは除外する
+
+""
+"" * vim-ripgrep
+""
+nnoremap <Space>l :Rg<CR>
 
 ""
 "" * terryma/vim-expand-region
@@ -204,3 +211,12 @@ autocmd VimEnter * set laststatus=0
 "" * tig
 ""
 nmap <silent> tt :TigStatus<CR>
+
+""
+"" * highlight
+""
+highlight Normal ctermbg=NONE guibg=NONE
+highlight NonText ctermbg=NONE guibg=NONE
+highlight LineNr ctermbg=NONE guibg=NONE
+highlight Folded ctermbg=NONE guibg=NONE
+highlight EndOfBuffer ctermbg=NONE guibg=NONE
