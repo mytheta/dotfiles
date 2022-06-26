@@ -96,7 +96,6 @@ call plug#begin('~/.vim/plugged')
 
 	" go
 	Plug 'mattn/vim-goimports'
-	Plug 'vim-jp/vim-go-extra'
 	" terraform
 	Plug 'hashivim/vim-terraform'
 	" ytt
@@ -130,11 +129,6 @@ map J <Plug>(expand_region_shrink)
 ""
 syntax on
 colorscheme molokai
-
-""
-"" * golang-syntax
-""
-autocmd FileType go autocmd BufWritePre <buffer> Fmt
 
 ""
 "" * lsp
@@ -182,6 +176,12 @@ let g:lsp_settings = {
   \     },
   \   },
   \ }
+
+""
+"" * mattn/vim-goimports
+""
+let g:goimports = 1
+let g:goimports_simplify = 1
 
 ""
 "" * prabirshrestha/asyncomplete.vim
