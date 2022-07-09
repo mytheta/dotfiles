@@ -26,8 +26,8 @@ set wildmode=full
 set wrap " 画面の端で、行を折り返して表示してくれるようになる
 set backspace=indent,eol,start " インサートモード中の BS、CTRL-W、CTRL-U による文字削除を柔軟にする
 set autoindent "改行時に前の行のインデントを継続する"
-set list
-set listchars=tab:»-,trail:-,extends:»,precedes:«,nbsp:%
+" set list
+" set listchars=tab:»-,trail:-,extends:»,precedes:«,nbsp:%
 xnoremap <expr> p 'pgv"'.v:register.'ygv<esc>' " paste時にyankしない
 
 ""
@@ -111,12 +111,21 @@ call plug#end()
 nnoremap <Space>b :Buffers<CR>
 nnoremap <Space>f :Files<CR>
 let $FZF_DEFAULT_COMMAND="rg --files --hidden -g '!.git/**' -g '!bazel-server'"
-command! -bang -nargs=* Ag call fzf#vim#ag(<q-args>, {'options': '--delimiter : --nth 4..'}, <bang>0) "ファイルは除外する
+
 
 ""
 "" * vim-ripgrep
 ""
-nnoremap <Space>l :Rg<CR>
+function! FZGrep(query, fullscreen)
+  let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case -- %s || true'
+  let initial_command = printf(command_fmt, shellescape(a:query))
+  let reload_command = printf(command_fmt, '{q}')
+  let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
+  call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
+endfunction
+
+command! -nargs=* -bang RG call FZGrep(<q-args>, <bang>0)
+nnoremap <Space>l :RG<CR>
 
 ""
 "" * terryma/vim-expand-region
@@ -196,7 +205,7 @@ inoremap <expr> <cr> pumvisible() ? asyncomplete#close_popup() . "\<cr>" : "\<cr
 let g:airline_theme='violet' 
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_statusline_ontop = 1
-let g:airline_powerline_fonts = 1
+let g:airline_powerline_fonts = 0
 let g:airline#extensions#tabline#buffer_nr_show = 1
 let g:airline_section_b='%{airline#extensions#branch#get_head()}'
 let g:airline_section_x=''
