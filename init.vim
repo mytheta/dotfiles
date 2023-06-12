@@ -143,7 +143,7 @@ colorscheme molokai
 "" * lsp
 ""
 nmap <silent> <Space>d :LspDefinition<CR>
-nmap <silent> <Space>r :LspRename<CR>
+nmap <silent> rn :LspRename<CR>
 nmap <silent> <Space>T :LspTypeDefinition<CR>
 nmap <silent> <Space>i :LspImplementation<CR>
 nmap <silent> <Space>a :LspCodeAction<CR>
