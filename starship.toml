@@ -1,7 +1,7 @@
 # Don't print a new line at the start of the prompt
 add_newline = false
 
-right_format = "$time"
+# right_format = "$time"
 
 
 # Replace the "❯" symbol in the prompt with "➜"
@@ -19,9 +19,9 @@ disabled = true
 disabled = true
 
 [time]
-disabled = false
-style = "bold bright-black"
-format = "[$time]($style)"
+disabled = true 
+# style = "bold bright-black"
+# format = "[$time]($style)"
 
 [line_break]
 disabled = true

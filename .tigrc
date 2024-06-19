@@ -15,4 +15,4 @@ bind branch L !git pull origin %(branch)
 
 bind status a !?git commit --amend
 bind status P !git push
-bind status d !@?rm -rf %(file) 
+bind status D !@?rm -rf %(file) 
