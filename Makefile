@@ -3,7 +3,7 @@ sync:
 	mkdir -p ~/.config/git
 	mkdir -p ~/.config/nvim
 	[ -f ~/.config/nvim/init.vim ] || ln -s $(PWD)/init.vim ~/.config/nvim/init.vim
-	[ -f ~/.vimrc ] || ln -s $(PWD)/init.vim ~/.vimrc
+	[ -f ~/.vimrc ] || ln -s $(PWD)/.vimrc ~/.vimrc
 	ln -s ~/.config/nvim ~/.vim
 	[ -f ~/.ideavimrc ] || ln -s $(PWD)/.ideavimrc ~/.ideavimrc
 	[ -f ~/.zshrc ] || ln -s $(PWD)/.zshrc ~/.zshrc
@@ -33,6 +33,6 @@ clean:
 brew:
 	brew bundle
 
-setup: clean sync brew
+setup: clean sync
 
 .PHONY: clean sync brew

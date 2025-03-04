@@ -66,8 +66,8 @@ alias ....='cd ../../..'
 alias .....='cd ../../../..'
 alias d='dirs -v | head -10'
   
-alias ls='exa -G'
-alias la='exa -la'
+alias ls='eza -G'
+alias la='eza -la'
 
 alias vi='nvim'
 alias vim='nvim'
@@ -99,3 +99,8 @@ eval "$(starship init zsh)"
 # Customize to your needs...(ターミナルが青くて見にくいので直す)
 export CLICOLOR=1
 export LSCOLORS=DxGxcxdxCxegedabagacad
+
+export NVM_DIR="$HOME/.config/nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
