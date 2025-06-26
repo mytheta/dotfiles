@@ -35,3 +35,6 @@ format = "[$symbol$branch(:$remote_branch)]($style) "
 
 [gcloud]
 disabled = true
+
+[python]
+disabled = true

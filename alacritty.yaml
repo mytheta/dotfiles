@@ -15,5 +15,3 @@ env:
   TERM: xterm-256color
 selection:
   save_to_clipboard: true
-import:
- - ~/.config/alacritty/themes/themes/cyber_punk_neon.yaml

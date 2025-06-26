@@ -14,6 +14,7 @@ sync:
 	[ -f ~/.git_commit ] || ln -s $(PWD)/git/.git_commit ~/.git_commit
 	[ -f ~/.config/git/ignore ] || ln -s $(PWD)/git/.gitignore_global ~/.config/git/ignore
 	[ -f ~/.config/starship.toml ] || ln -s $(PWD)/starship.toml ~/.config/starship.toml
+	[ -f ~/alacritty.yaml ] || ln -s $(PWD)/alacritty.yaml ~/alacritty.yaml
 
 clean:
 	rm -f ~/.vimrc
