@@ -103,21 +103,6 @@ call plug#begin('~/.vim/plugged')
 	Plug 'vmware-tanzu/ytt.vim'
 	" protobuf
 	Plug 'uarun/vim-protobuf'
-
-	" 以下avante.nvimの設定
-	" Deps
-	Plug 'stevearc/dressing.nvim'
-	Plug 'nvim-lua/plenary.nvim'
-	Plug 'MunifTanjim/nui.nvim'
-
-	" Optional deps
-	Plug 'hrsh7th/nvim-cmp'
-	Plug 'nvim-tree/nvim-web-devicons' "or Plug 'echasnovski/mini.icons'
-	Plug 'HakonHarnes/img-clip.nvim'
-	Plug 'zbirenbaum/copilot.lua'
-
-	" Yay, pass source=true if you want to build from source
-	Plug 'yetone/avante.nvim', { 'branch': 'main', 'do': 'make' }
 call plug#end()
 
 ""
@@ -249,44 +234,3 @@ highlight NonText ctermbg=NONE guibg=NONE
 highlight LineNr ctermbg=NONE guibg=NONE
 highlight Folded ctermbg=NONE guibg=NONE
 highlight EndOfBuffer ctermbg=NONE guibg=NONE
-
-""
-"" * avante.nvim
-""
-autocmd! User avante.nvim 
-lua << EOF
-require('avante_lib').load()
-require('copilot').setup({})
-require('avante').setup({
-	provider = "copilot",
-    auto_suggestions_provider = "copilot",
-	copilot = {
-	  model = "gpt-4o-2024-05-13",
-	  -- model = "gpt-4o-mini",
-	  max_tokens = 4096,
-	},
-    -- 動作設定
-    behaviour = {
-      auto_suggestions = false,
-      auto_set_highlight_group = true,
-      auto_set_keymaps = true,
-      auto_apply_diff_after_generation = false,
-      support_paste_from_clipboard = false,
-      minimize_diff = true,
-    },
-    -- ウィンドウ設定
-	windows = {
-	  position = "right",
-	  width = 30,
-	  sidebar_header = {
-	  	align = "center",
-	  	rounded = false,
-	  },
-	  ask = {
-	  	floating = true,
-	  	start_insert = true,
-	  	border = "rounded"
-	  }
-	},
-})
-EOF
