@@ -2,7 +2,7 @@
 "" * setting
 ""
 set lazyredraw " fast
-set clipboard=unnamed " macのクリップボードとyankを共有
+set clipboard=unnamedplus " macのクリップボードとyankを共有
 set showmatch " 括弧移動
 set matchtime=1 " 時間短縮
 set autoread " 開いているがvim上で変更のないファイルについて、外部で変更があった時に自動的に読み込む
@@ -26,8 +26,6 @@ set wildmode=full
 set wrap " 画面の端で、行を折り返して表示してくれるようになる
 set backspace=indent,eol,start " インサートモード中の BS、CTRL-W、CTRL-U による文字削除を柔軟にする
 set autoindent "改行時に前の行のインデントを継続する"
-" set list
-" set listchars=tab:»-,trail:-,extends:»,precedes:«,nbsp:%
 xnoremap <expr> p 'pgv"'.v:register.'ygv<esc>' " paste時にyankしない
 
 ""
@@ -49,11 +47,12 @@ nnoremap - :<C-u>e %:h<CR>
 ""
 call plug#begin('~/.vim/plugged')
 	" lsp
-	Plug 'prabirshrestha/async.vim'
-	Plug 'prabirshrestha/asyncomplete.vim'
-	Plug 'prabirshrestha/asyncomplete-lsp.vim'
-	Plug 'prabirshrestha/vim-lsp'
-	Plug 'mattn/vim-lsp-settings'
+	Plug 'neovim/nvim-lspconfig'
+	Plug 'williamboman/mason.nvim', { 'do': ':MasonUpdate' }
+	Plug 'williamboman/mason-lspconfig.nvim'
+	Plug 'hrsh7th/nvim-cmp'
+	Plug 'hrsh7th/cmp-nvim-lsp'
+	Plug 'hrsh7th/cmp-vsnip'
 
 	" filer
 	Plug 'mattn/vim-molder'
@@ -139,28 +138,11 @@ map J <Plug>(expand_region_shrink)
 syntax on
 colorscheme molokai
 
+" true color対応
 if !has('gui_running') && &term =~ '^\%(screen\|tmux\)'
   let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
   let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 endif
-
-""
-"" * lsp
-""
-nmap <silent> <Space>d :LspDefinition<CR>
-nmap <silent> rn :LspRename<CR>
-nmap <silent> <Space>T :LspTypeDefinition<CR>
-nmap <silent> <Space>i :LspImplementation<CR>
-nmap <silent> <Space>a :LspCodeAction<CR>
-nmap <silent> rr :LspReferences<CR>
-let g:lsp_diagnostics_enabled = 1
-let g:lsp_diagnostics_echo_cursor = 1 " Show diagnostics message to status line
-let g:asyncomplete_popup_delay = 200
-
-""
-"" * mattn/vim-lsp-settings
-""
-highlight link LspWarningHighlight Error
 
 ""
 "" * mattn/vim-molder
@@ -180,29 +162,10 @@ nmap <silent> <Space>t :TestNearest<CR>
 let test#strategy = "vimux"
 
 ""
-"" * vim-vsnip
-""
-imap <expr> <C-l>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
-let g:lsp_settings = {
-  \   'gopls': {
-  \     'initialization_options': {
-  \       'usePlaceholders': v:true,
-  \     },
-  \   },
-  \ }
-
-""
 "" * mattn/vim-goimports
 ""
 let g:goimports = 1
 let g:goimports_simplify = 1
-
-""
-"" * prabirshrestha/asyncomplete.vim
-""
-inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-inoremap <expr> <cr> pumvisible() ? asyncomplete#close_popup() . "\<cr>" : "\<cr>"
 
 ""
 "" * vim-airline/vim-airline
@@ -227,10 +190,78 @@ autocmd VimEnter * set laststatus=0
 nmap <silent> tt :TigStatus<CR>
 
 ""
-"" * highlight
+"" * highlight(半透明化)
 ""
-highlight Normal ctermbg=NONE guibg=NONE
-highlight NonText ctermbg=NONE guibg=NONE
-highlight LineNr ctermbg=NONE guibg=NONE
-highlight Folded ctermbg=NONE guibg=NONE
-highlight EndOfBuffer ctermbg=NONE guibg=NONE
+" highlight Normal ctermbg=NONE guibg=NONE
+" highlight NonText ctermbg=NONE guibg=NONE
+" highlight LineNr ctermbg=NONE guibg=NONE
+" highlight Folded ctermbg=NONE guibg=NONE
+" highlight EndOfBuffer ctermbg=NONE guibg=NONE
+
+" ==================================================================
+" LSP / completion (Lua) ###########################################
+" ==================================================================
+lua << EOF
+-- mason -----------------------------------------------------------
+require('mason').setup()
+require('mason-lspconfig').setup{
+  ensure_installed = { 'gopls' },   -- 使う言語サーバーを列挙
+  automatic_installation = true,
+}
+
+-- common on_attach ------------------------------------------------
+vim.api.nvim_create_autocmd('LspAttach', {
+  callback = function(args)
+    local buf = args.buf
+    local nmap = function(lhs, rhs, desc)
+      vim.keymap.set('n', lhs, rhs,
+        {buffer = buf, silent = true, noremap = true, desc = desc})
+    end
+
+    nmap('<Space>d', vim.lsp.buf.definition,       'Go to definition')
+    nmap('<Space>T', vim.lsp.buf.type_definition,  'Go to type')
+    nmap('<Space>i', vim.lsp.buf.implementation,   'Go to impl')
+    nmap('<Space>a', vim.lsp.buf.code_action,      'Code action')
+    nmap('rn',        vim.lsp.buf.rename,          'Rename symbol')
+    nmap('rr',        vim.lsp.buf.references,      'List references')
+  end,
+})
+
+-- capabilities (for nvim-cmp) ------------------------------------
+local capabilities = require('cmp_nvim_lsp').default_capabilities()
+
+-- gopls -----------------------------------------------------------
+require('lspconfig').gopls.setup{
+  on_attach = on_attach,
+  capabilities = capabilities,
+  settings = {
+    gopls = {
+      usePlaceholders = true,      -- 旧 g:lsp_settings 相当
+    },
+  },
+}
+
+-- nvim-cmp --------------------------------------------------------
+local cmp = require('cmp')
+cmp.setup{
+  snippet = {
+    expand = function(args)
+      vim.fn['vsnip#anonymous'](args.body)
+    end,
+  },
+  mapping = cmp.mapping.preset.insert({
+    ['<Tab>']   = cmp.mapping.select_next_item(),
+    ['<S-Tab>'] = cmp.mapping.select_prev_item(),
+    ['<CR>']    = cmp.mapping.confirm({ select = true }),
+  }),
+  sources = {
+    { name = 'nvim_lsp' },
+    { name = 'vsnip' },
+    { name = 'buffer' },
+    { name = 'path' },
+  },
+}
+EOF
+
+" colorscheme の直後に書くと確実に上書きできる
+hi MatchParen cterm=bold ctermfg=lightgrey ctermbg=NONE gui=bold guifg=#B0B0B0 guibg=NONE
