@@ -27,6 +27,8 @@ set wrap " 画面の端で、行を折り返して表示してくれるように
 set backspace=indent,eol,start " インサートモード中の BS、CTRL-W、CTRL-U による文字削除を柔軟にする
 set autoindent "改行時に前の行のインデントを継続する"
 xnoremap <expr> p 'pgv"'.v:register.'ygv<esc>' " paste時にyankしない
+nnoremap - :<C-u>e %:h<CR> " fileからディレクトリに戻る
+au CursorHold * checktime " 同期
 
 ""
 "" * 挿入モードで縦棒カーソル表示(vimの時)
@@ -36,11 +38,6 @@ if has('vim_starting')
 	let &t_EI .= "\e[2 q"
 	let &t_SR .= "\e[4 q"
 endif
-
-""
-"" * fileからディレクトリに戻る
-""
-nnoremap - :<C-u>e %:h<CR>
 
 ""
 "" * vim-plugin
@@ -53,6 +50,11 @@ call plug#begin('~/.vim/plugged')
 	Plug 'hrsh7th/nvim-cmp'
 	Plug 'hrsh7th/cmp-nvim-lsp'
 	Plug 'hrsh7th/cmp-vsnip'
+	" --- code-action プレビュー ------------------------------
+    Plug 'aznhe21/actions-preview.nvim'
+    Plug 'MunifTanjim/nui.nvim'
+	Plug 'nvim-telescope/telescope.nvim'
+	Plug 'nvim-lua/plenary.nvim'
 
 	" filer
 	Plug 'mattn/vim-molder'
@@ -81,10 +83,8 @@ call plug#begin('~/.vim/plugged')
 	" git
 	Plug 'tyru/open-browser.vim'
 	Plug 'tyru/open-browser-github.vim'
-	Plug 'APZelos/blamer.nvim'
 	Plug 'airblade/vim-gitgutter'
 	Plug 'iberianpig/tig-explorer.vim' " vimからtigを開く
-	Plug 'rbgrouleff/bclose.vim'
 
 	" etc
 	Plug 'tpope/vim-commentary' " gccでコメントアウトできるようにする
@@ -192,11 +192,11 @@ nmap <silent> tt :TigStatus<CR>
 ""
 "" * highlight(半透明化)
 ""
-" highlight Normal ctermbg=NONE guibg=NONE
-" highlight NonText ctermbg=NONE guibg=NONE
-" highlight LineNr ctermbg=NONE guibg=NONE
-" highlight Folded ctermbg=NONE guibg=NONE
-" highlight EndOfBuffer ctermbg=NONE guibg=NONE
+highlight Normal ctermbg=NONE guibg=NONE
+highlight NonText ctermbg=NONE guibg=NONE
+highlight LineNr ctermbg=NONE guibg=NONE
+highlight Folded ctermbg=NONE guibg=NONE
+highlight EndOfBuffer ctermbg=NONE guibg=NONE
 
 " ==================================================================
 " LSP / completion (Lua) ###########################################
@@ -221,7 +221,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
     nmap('<Space>d', vim.lsp.buf.definition,       'Go to definition')
     nmap('<Space>T', vim.lsp.buf.type_definition,  'Go to type')
     nmap('<Space>i', vim.lsp.buf.implementation,   'Go to impl')
-    nmap('<Space>a', vim.lsp.buf.code_action,      'Code action')
+    nmap('<Space>a', require('actions-preview').code_actions,'Preview code action')
     nmap('rn',        vim.lsp.buf.rename,          'Rename symbol')
     nmap('rr',        vim.lsp.buf.references,      'List references')
   end,
@@ -261,7 +261,15 @@ cmp.setup{
     { name = 'path' },
   },
 }
+
+-- actions-preview.nvim -------------------------------------------
+require('actions-preview').setup {
+  backend = { 'telescope', 'nui' },           -- telescope 優先
+  telescope = require('telescope.themes').get_dropdown {
+    winblend = 10,                            -- 透過度
+    preview_cutoff = 20,                      -- リストが20行以下ならプレビュー非表示
+  },
+}
 EOF
 
-" colorscheme の直後に書くと確実に上書きできる
-hi MatchParen cterm=bold ctermfg=lightgrey ctermbg=NONE gui=bold guifg=#B0B0B0 guibg=NONE
+hi MatchParen cterm=bold ctermfg=lightgrey ctermbg=NONE gui=bold guifg=#B0B0B0 guibg=NONE " Parenの色をわかりやすく
