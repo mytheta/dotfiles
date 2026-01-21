@@ -29,6 +29,7 @@ set autoindent "改行時に前の行のインデントを継続する"
 xnoremap <expr> p 'pgv"'.v:register.'ygv<esc>' " paste時にyankしない
 nnoremap - :<C-u>e %:h<CR> " fileからディレクトリに戻る
 au CursorHold * checktime " 同期
+nnoremap <silent> <Space>c :silent !echo %:p \| pbcopy<CR> " 開いてる絶対pathを取得
 
 ""
 "" * 挿入モードで縦棒カーソル表示(vimの時)
@@ -207,6 +208,7 @@ require('mason').setup()
 require('mason-lspconfig').setup{
   ensure_installed = { 'gopls' },   -- 使う言語サーバーを列挙
   automatic_installation = true,
+  automatic_enable = false, -- https://github.com/mason-org/mason.nvim/issues/1929
 }
 
 -- common on_attach ------------------------------------------------
