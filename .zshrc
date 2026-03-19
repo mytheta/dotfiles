@@ -1,6 +1,7 @@
 # =============
 #    INIT
 # =============
+# 
 [ -r ~/.zsh_private ] && source ~/.zsh_private
 setopt +o nomatch 
 
@@ -33,6 +34,9 @@ setopt EXTENDED_HISTORY
 
 #tmuxでemacsのキーバインド
 bindkey -e
+
+# 定義しないとpecoでぶっ壊れる
+export TERM=xterm-256color
 
 
 # ===================
@@ -86,7 +90,6 @@ alias sw='git switch'
 alias sm='git switch master && git pull'
 alias gsm='git for-each-ref refs/heads/ "--format=%(refname:short)" | while read branch; do mergeBase=$(git merge-base main $branch) && [[ $(git cherry main $(git commit-tree $(git rev-parse $branch\^{tree}) -p $mergeBase -m _)) == "-"* ]] && git branch -D $branch; done'
 
-alias cat='ccat'
 alias ee='exit'
 alias t='tig status'
 alias gl='gcd'
@@ -103,4 +106,3 @@ export LSCOLORS=DxGxcxdxCxegedabagacad
 export NVM_DIR="$HOME/.config/nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-export PATH="/opt/homebrew/opt/libpq/bin:$PATH"

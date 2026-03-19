@@ -32,23 +32,14 @@ au CursorHold * checktime " 同期
 nnoremap <silent> <Space>c :silent !echo %:p \| pbcopy<CR> " 開いてる絶対pathを取得
 
 ""
-"" * 挿入モードで縦棒カーソル表示(vimの時)
-""
-if has('vim_starting')
-	let &t_SI .= "\e[6 q"
-	let &t_EI .= "\e[2 q"
-	let &t_SR .= "\e[4 q"
-endif
-
-""
 "" * vim-plugin
 ""
 call plug#begin('~/.vim/plugged')
 	" lsp
-	Plug 'neovim/nvim-lspconfig'
-	Plug 'williamboman/mason.nvim', { 'do': ':MasonUpdate' }
+	Plug 'neovim/nvim-lspconfig' " LSP設定
+	Plug 'williamboman/mason.nvim', { 'do': ':MasonUpdate' } " LSPサーバー管理
 	Plug 'williamboman/mason-lspconfig.nvim'
-	Plug 'hrsh7th/nvim-cmp'
+	Plug 'hrsh7th/nvim-cmp' " 補完
 	Plug 'hrsh7th/cmp-nvim-lsp'
 	Plug 'hrsh7th/cmp-vsnip'
 	" --- code-action プレビュー ------------------------------
@@ -90,12 +81,13 @@ call plug#begin('~/.vim/plugged')
 	" etc
 	Plug 'tpope/vim-commentary' " gccでコメントアウトできるようにする
 	Plug 'unblevable/quick-scope' " 横移動をいい感じにする
-	Plug 'terryma/vim-expand-region' " 選択範囲をいい感じにする
 	Plug 'cohama/lexima.vim' " 閉じかっこ補完
 	Plug 'tomasr/molokai' " color thema
 
 	" go
 	Plug 'mattn/vim-goimports'
+	" rust
+	Plug 'rust-lang/rust.vim'
 	" terraform
 	Plug 'hashivim/vim-terraform'
 	" ytt
@@ -126,12 +118,6 @@ endfunction
 
 command! -nargs=* -bang RG call FZGrep(<q-args>, <bang>0)
 nnoremap <Space>l :RG<CR>
-
-""
-"" * terryma/vim-expand-region
-""
-map K <Plug>(expand_region_expand)
-map J <Plug>(expand_region_shrink)
 
 ""
 "" * colorscheme
@@ -169,6 +155,13 @@ let g:goimports = 1
 let g:goimports_simplify = 1
 
 ""
+"" rust-lang/rust.vim
+""
+" 自動import
+let g:rustfmt_autosave = 1
+
+
+""
 "" * vim-airline/vim-airline
 ""
 let g:airline_theme='violet' 
@@ -203,12 +196,55 @@ highlight EndOfBuffer ctermbg=NONE guibg=NONE
 " LSP / completion (Lua) ###########################################
 " ==================================================================
 lua << EOF
+-- capabilities (for nvim-cmp) ------------------------------------
+local capabilities = require('cmp_nvim_lsp').default_capabilities()
+
+-- server configs ---------------------------------------------------
+local servers = {
+  gopls = {
+    settings = {
+      gopls = {
+        usePlaceholders = true,
+        gofumpt = true,
+        staticcheck = true,
+        analyses = {
+          unusedparams = true,
+          nilness = true,
+          shadow = true,
+        },
+        codelenses = {
+          generate = true,
+          gc_details = false,
+          test = true,
+          tidy = true,
+        },
+      },
+    },
+  },
+
+  rust_analyzer = {
+    settings = {
+      ["rust-analyzer"] = {
+        cargo = { allFeatures = true },
+        checkOnSave = { command = "clippy" },
+        inlayHints = { enable = true },
+      },
+    },
+  },
+}
+
 -- mason -----------------------------------------------------------
 require('mason').setup()
 require('mason-lspconfig').setup{
-  ensure_installed = { 'gopls' },   -- 使う言語サーバーを列挙
+  ensure_installed = { 'gopls', 'rust_analyzer' },   -- 使う言語サーバーを列挙
   automatic_installation = true,
-  automatic_enable = false, -- https://github.com/mason-org/mason.nvim/issues/1929
+  handlers = {
+    function(server_name)
+      local opts = servers[server_name] or {}
+      opts.capabilities = capabilities
+      require("lspconfig")[server_name].setup(opts)
+    end,
+  },
 }
 
 -- common on_attach ------------------------------------------------
@@ -228,20 +264,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
     nmap('rr',        vim.lsp.buf.references,      'List references')
   end,
 })
-
--- capabilities (for nvim-cmp) ------------------------------------
-local capabilities = require('cmp_nvim_lsp').default_capabilities()
-
--- gopls -----------------------------------------------------------
-require('lspconfig').gopls.setup{
-  on_attach = on_attach,
-  capabilities = capabilities,
-  settings = {
-    gopls = {
-      usePlaceholders = true,      -- 旧 g:lsp_settings 相当
-    },
-  },
-}
 
 -- nvim-cmp --------------------------------------------------------
 local cmp = require('cmp')
@@ -272,6 +294,41 @@ require('actions-preview').setup {
     preview_cutoff = 20,                      -- リストが20行以下ならプレビュー非表示
   },
 }
+
+-- diagnostics (エラー表示) ----------------------------------------
+-- エラー表示の設定
+vim.diagnostic.config({
+  virtual_text = {
+    prefix = '●',                             -- エラーアイコン
+    severity = vim.diagnostic.severity.ERROR,  -- エラーのみ表示
+  },
+  signs = true,                               -- 左側にエラー記号を表示
+  underline = true,                           -- エラー行に下線を表示
+  update_in_insert = false,                   -- 挿入モード中は更新しない
+  severity_sort = true,                       -- 重要度順にソート
+})
+
+-- エラーの色設定
+vim.api.nvim_set_hl(0, 'DiagnosticError', { fg = '#ff0000' })
+vim.api.nvim_set_hl(0, 'DiagnosticWarn', { fg = '#ffaa00' })
+vim.api.nvim_set_hl(0, 'DiagnosticInfo', { fg = '#00aaff' })
+vim.api.nvim_set_hl(0, 'DiagnosticHint', { fg = '#ffffff' })
+
+-- エラー記号の設定
+local signs = {
+  { name = "DiagnosticSignError", text = "✗", texthl = "DiagnosticSignError" },
+  { name = "DiagnosticSignWarn", text = "⚠", texthl = "DiagnosticSignWarn" },
+  { name = "DiagnosticSignInfo", text = "ℹ", texthl = "DiagnosticSignInfo" },
+  { name = "DiagnosticSignHint", text = "→", texthl = "DiagnosticSignHint" },
+}
+
+for _, sign in ipairs(signs) do
+  vim.fn.sign_define(sign.name, {
+    texthl = sign.name,
+    text = sign.text,
+    numhl = ""
+  })
+end
 EOF
 
 hi MatchParen cterm=bold ctermfg=lightgrey ctermbg=NONE gui=bold guifg=#B0B0B0 guibg=NONE " Parenの色をわかりやすく
