@@ -63,10 +63,6 @@ call plug#begin('~/.vim/plugged')
 	Plug 'vim-test/vim-test'
 	Plug 'preservim/vimux'
 	
-	" スニペット
-	Plug 'hrsh7th/vim-vsnip'
-	Plug 'hrsh7th/vim-vsnip-integ'
-
 	" status bar
 	Plug 'vim-airline/vim-airline'
 	Plug 'vim-airline/vim-airline-themes'
@@ -90,9 +86,6 @@ call plug#begin('~/.vim/plugged')
 	Plug 'rust-lang/rust.vim'
 	" terraform
 	Plug 'hashivim/vim-terraform'
-	" ytt
-	Plug 'cappyzawa/starlark.vim'
-	Plug 'vmware-tanzu/ytt.vim'
 	" protobuf
 	Plug 'uarun/vim-protobuf'
 call plug#end()
