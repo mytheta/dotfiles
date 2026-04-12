@@ -1,0 +1,136 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/aquaproj/aqua/main/json-schema/aqua-yaml.json
+# aqua - Declarative CLI Version Manager
+# https://aquaproj.github.io/
+# checksum:
+#   enabled: true
+#   require_checksum: true
+#   supported_envs:
+#   - all
+registries:
+- type: standard
+  ref: v4.492.0  # renovate: depName=aquaproj/aqua-registry
+packages:
+# Git/GitHub
+- name: cli/cli  # gh
+  version: v2.89.0
+- name: x-motemen/ghq
+  version: v1.10.1
+- name: git-chglog/git-chglog
+  version: v0.15.4
+- name: mislav/hub
+  version: v2.14.2
+
+# Kubernetes
+- name: kubernetes/kubernetes/kubectl
+  version: v1.35.3
+- name: ahmetb/kubectx
+  version: v0.11.0
+- name: helm/helm
+  version: v4.1.4
+- name: kubernetes-sigs/kustomize
+  version: kustomize/v5.8.1
+- name: derailed/k9s
+  version: v0.50.18
+- name: eksctl-io/eksctl
+  version: v0.225.0
+
+# Terraform
+- name: tfutils/tfenv
+  version: v3.0.0
+- name: terraform-linters/tflint
+  version: v0.61.0
+- name: aquasecurity/tfsec
+  version: v1.28.14
+- name: minamijoyo/tfmigrate
+  version: v0.4.4
+
+# Go tools
+- name: go-task/task
+  version: v3.49.1
+- name: golangci/golangci-lint
+  version: v2.11.4
+- name: bufbuild/buf
+  version: v1.67.0
+- name: ko-build/ko
+  version: v0.18.1
+- name: uber-go/mock  # mockgen
+  version: v0.6.0
+- name: dominikh/go-tools/staticcheck
+  version: "2026.1"
+- name: google/wire
+  version: v0.7.0
+- name: google/yamlfmt
+  version: v0.21.0
+- name: k1LoW/tbls
+  version: v1.94.4
+- name: protocolbuffers/protobuf-go/protoc-gen-go
+  version: v1.36.11
+- name: grpc/grpc-go/protoc-gen-go-grpc
+  version: cmd/protoc-gen-go-grpc/v1.6.1
+- name: grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway
+  version: v2.28.0
+- name: grpc-ecosystem/grpc-gateway/protoc-gen-openapiv2
+  version: v2.28.0
+- name: go-delve/delve  # dlv
+  version: v1.26.1
+- name: golang/tools/goimports
+  version: v0.44.0
+- name: incu6us/goimports-reviser
+  version: v3.12.6
+- name: golang.org/x/tools/gopls
+  version: v0.21.1
+- name: cloudspannerecosystem/spanner-cli
+  version: v0.11.2
+- name: cloudspannerecosystem/yo
+  version: v0.8.1
+
+# General CLI
+- name: sharkdp/bat
+  version: v0.26.1
+- name: eza-community/eza
+  version: v0.23.4
+- name: junegunn/fzf
+  version: v0.71.0
+- name: jqlang/jq
+  version: jq-1.8.1
+- name: mikefarah/yq
+  version: v4.52.5
+- name: BurntSushi/ripgrep
+  version: "15.1.0"
+- name: direnv/direnv
+  version: v2.37.1
+- name: starship/starship
+  version: v1.24.2
+- name: koalaman/shellcheck
+  version: v0.11.0
+- name: hadolint/hadolint
+  version: v2.14.0
+- name: charmbracelet/glow
+  version: v2.1.2
+- name: gohugoio/hugo
+  version: v0.160.1
+- name: digitalocean/doctl
+  version: v1.154.0
+- name: CircleCI-Public/circleci-cli
+  version: v0.1.34950
+- name: peco/peco
+  version: v0.6.0
+- name: muesli/duf
+  version: v0.9.1
+- name: suzuki-shunsuke/pinact
+  version: v3.9.0
+- name: neovim/neovim
+  version: v0.12.1
+- name: golang/go
+  version: go1.26.2
+- name: aws/aws-cli
+  version: "2.34.29"
+- name: pnpm/pnpm
+  version: v10.33.0
+- name: bcicen/slackcat
+  version: "1.7.3"
+- name: ariga/atlas
+  version: v1.2.0
+- name: context-labs/mactop
+  version: v0.2.7

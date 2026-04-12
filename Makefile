@@ -14,6 +14,8 @@ sync:
 	[ -f ~/.git_commit ] || ln -s $(PWD)/git/.git_commit ~/.git_commit
 	[ -f ~/.config/git/ignore ] || ln -s $(PWD)/git/.gitignore_global ~/.config/git/ignore
 	[ -f ~/.config/starship.toml ] || ln -s $(PWD)/starship.toml ~/.config/starship.toml
+	mkdir -p ~/.aqua/global
+	[ -f ~/.aqua/global/.aqua.yaml ] || ln -s $(PWD)/aqua.yaml ~/.aqua/global/.aqua.yaml
 
 clean:
 	rm -f ~/.vimrc
@@ -29,6 +31,7 @@ clean:
 	rm -f ~/.git_commit
 	rm -f ~/.gitconfig
 	rm -rf ~/.vim
+	rm -f ~/.aqua/global/.aqua.yaml
 
 brew:
 	brew bundle

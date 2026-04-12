@@ -1,9 +1,14 @@
 # =============
 #    INIT
 # =============
-# 
+#
+# aqua - CLIツールのバージョン管理
+export AQUA_ROOT_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/aquaproj-aqua"
+export AQUA_GLOBAL_CONFIG="$HOME/.aqua/global/.aqua.yaml"
+export PATH="${AQUA_ROOT_DIR}/bin:$PATH"
+
 [ -r ~/.zsh_private ] && source ~/.zsh_private
-setopt +o nomatch 
+setopt +o nomatch
 
 
 # =============
