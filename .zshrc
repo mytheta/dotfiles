@@ -40,6 +40,23 @@ export TERM=xterm-256color
 
 
 # ===================
+#    TMUX WINDOW NAME
+# ===================
+function _tmux_update_window_name() {
+  if [[ -n "$TMUX" ]]; then
+    local repo_root
+    repo_root=$(git rev-parse --show-toplevel 2>/dev/null)
+    if [[ -n "$repo_root" ]]; then
+      tmux rename-window "$(basename "$repo_root")"
+    else
+      tmux rename-window "$(basename "$PWD")"
+    fi
+  fi
+}
+chpwd_functions+=(_tmux_update_window_name)
+_tmux_update_window_name
+
+# ===================
 #    PLUGINS
 # ===================
 ##lika a fish syntax-highright
