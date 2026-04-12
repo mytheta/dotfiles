@@ -42,6 +42,9 @@ export TERM=xterm-256color
 # ===================
 #    TMUX WINDOW NAME
 # ===================
+# cdするたびにtmuxのウィンドウ名を自動更新する
+# - gitリポジトリ内 → リポジトリ名
+# - gitリポジトリ外 → カレントディレクトリ名
 function _tmux_update_window_name() {
   if [[ -n "$TMUX" ]]; then
     local repo_root
@@ -53,7 +56,9 @@ function _tmux_update_window_name() {
     fi
   fi
 }
+# chpwdフックに登録（cd時に自動発火）
 chpwd_functions+=(_tmux_update_window_name)
+# シェル起動時にも実行して初期ウィンドウ名をセット
 _tmux_update_window_name
 
 # ===================
