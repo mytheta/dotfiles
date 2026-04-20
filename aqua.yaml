@@ -88,8 +88,7 @@ packages:
 # General CLI
 - name: sharkdp/bat
   version: v0.26.1
-- name: eza-community/eza
-  version: v0.23.4
+# eza はlibgit2依存のためbrewで管理
 - name: junegunn/fzf
   version: v0.71.0
 - name: jqlang/jq
