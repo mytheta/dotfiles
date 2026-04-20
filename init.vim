@@ -5,27 +5,14 @@ set lazyredraw " fast
 set clipboard=unnamedplus " macのクリップボードとyankを共有
 set showmatch " 括弧移動
 set matchtime=1 " 時間短縮
-set autoread " 開いているがvim上で変更のないファイルについて、外部で変更があった時に自動的に読み込む
-set enc=utf8 " utf8
-set fenc=utf-8 " utf8にエンコード
 set shiftwidth=4
 set tabstop=4
-set hidden " 保存されていないファイルがあるときでも別のファイルを開くことが出来る
 set history=100 " コマンドラインの履歴を100件保存する
-set hlsearch " 検索文字列をハイライトする
-set incsearch " インクリメンタルサーチを行う
 set isk+=- " ハイフンをiskeywordに含める
-set ttyfast
-set nobackup " 勝手に作るファイルを無効にする
 set noswapfile
 set number " 行番号の表示
 set noruler " 右下に表示されるやつを消す
 set visualbell " ビープ音を消す
-set wildmenu " ファイル名補完
-set wildmode=full
-set wrap " 画面の端で、行を折り返して表示してくれるようになる
-set backspace=indent,eol,start " インサートモード中の BS、CTRL-W、CTRL-U による文字削除を柔軟にする
-set autoindent "改行時に前の行のインデントを継続する"
 xnoremap <expr> p 'pgv"'.v:register.'ygv<esc>' " paste時にyankしない
 nnoremap - :<C-u>e %:h<CR> " fileからディレクトリに戻る
 au CursorHold * checktime " 同期
@@ -60,8 +47,8 @@ call plug#begin('~/.vim/plugged')
 	Plug 'jremmen/vim-ripgrep'
 
 	" test
-	Plug 'vim-test/vim-test'
-	Plug 'preservim/vimux'
+	Plug 'vim-test/vim-test', { 'on': ['TestNearest', 'TestFile', 'TestSuite', 'TestLast', 'TestVisit'] }
+	Plug 'preservim/vimux', { 'on': ['TestNearest', 'TestFile', 'TestSuite', 'TestLast', 'TestVisit'] }
 	
 	" status bar
 	Plug 'vim-airline/vim-airline'
@@ -69,10 +56,10 @@ call plug#begin('~/.vim/plugged')
 	Plug 'tpope/vim-fugitive' " status barにgit branchを表示させるため
 
 	" git
-	Plug 'tyru/open-browser.vim'
-	Plug 'tyru/open-browser-github.vim'
+	Plug 'tyru/open-browser.vim', { 'on': ['OpenBrowser', 'OpenBrowserSmartSearch'] }
+	Plug 'tyru/open-browser-github.vim', { 'on': ['OpenGithubFile', 'OpenGithubPullReq', 'OpenGithubIssue', 'OpenGithubProject'] }
 	Plug 'airblade/vim-gitgutter'
-	Plug 'iberianpig/tig-explorer.vim' " vimからtigを開く
+	Plug 'iberianpig/tig-explorer.vim', { 'on': ['TigStatus', 'TigOpenCurrentFile', 'TigOpenProjectRootDir', 'TigBlame', 'TigGrep'] } " vimからtigを開く
 
 	" etc
 	Plug 'tpope/vim-commentary' " gccでコメントアウトできるようにする
@@ -81,13 +68,13 @@ call plug#begin('~/.vim/plugged')
 	Plug 'tomasr/molokai' " color thema
 
 	" go
-	Plug 'mattn/vim-goimports'
+	Plug 'mattn/vim-goimports', { 'for': 'go' }
 	" rust
-	Plug 'rust-lang/rust.vim'
+	Plug 'rust-lang/rust.vim', { 'for': 'rust' }
 	" terraform
-	Plug 'hashivim/vim-terraform'
+	Plug 'hashivim/vim-terraform', { 'for': ['terraform', 'hcl'] }
 	" protobuf
-	Plug 'uarun/vim-protobuf'
+	Plug 'uarun/vim-protobuf', { 'for': 'proto' }
 call plug#end()
 
 ""
@@ -185,6 +172,11 @@ highlight LineNr ctermbg=NONE guibg=NONE
 highlight Folded ctermbg=NONE guibg=NONE
 highlight EndOfBuffer ctermbg=NONE guibg=NONE
 
+" カーソル色を水色に
+set termguicolors
+highlight Cursor guifg=NONE guibg=#00FFFF
+highlight lCursor guifg=NONE guibg=#00FFFF
+
 " ==================================================================
 " LSP / completion (Lua) ###########################################
 " ==================================================================
@@ -219,7 +211,8 @@ local servers = {
     settings = {
       ["rust-analyzer"] = {
         cargo = { allFeatures = true },
-        checkOnSave = { command = "clippy" },
+        checkOnSave = true,
+        check = { command = "clippy" },
         inlayHints = { enable = true },
       },
     },
@@ -289,39 +282,28 @@ require('actions-preview').setup {
 }
 
 -- diagnostics (エラー表示) ----------------------------------------
--- エラー表示の設定
 vim.diagnostic.config({
   virtual_text = {
-    prefix = '●',                             -- エラーアイコン
-    severity = vim.diagnostic.severity.ERROR,  -- エラーのみ表示
+    prefix = '●',
+    severity = vim.diagnostic.severity.ERROR,  -- エラーのみvirtual_text表示
   },
-  signs = true,                               -- 左側にエラー記号を表示
-  underline = true,                           -- エラー行に下線を表示
-  update_in_insert = false,                   -- 挿入モード中は更新しない
-  severity_sort = true,                       -- 重要度順にソート
+  signs = {
+    text = {
+      [vim.diagnostic.severity.ERROR] = '✗',
+      [vim.diagnostic.severity.WARN]  = '⚠',
+      [vim.diagnostic.severity.INFO]  = 'ℹ',
+      [vim.diagnostic.severity.HINT]  = '→',
+    },
+  },
+  underline = true,
+  update_in_insert = false,
+  severity_sort = true,
 })
 
--- エラーの色設定
 vim.api.nvim_set_hl(0, 'DiagnosticError', { fg = '#ff0000' })
-vim.api.nvim_set_hl(0, 'DiagnosticWarn', { fg = '#ffaa00' })
-vim.api.nvim_set_hl(0, 'DiagnosticInfo', { fg = '#00aaff' })
-vim.api.nvim_set_hl(0, 'DiagnosticHint', { fg = '#ffffff' })
-
--- エラー記号の設定
-local signs = {
-  { name = "DiagnosticSignError", text = "✗", texthl = "DiagnosticSignError" },
-  { name = "DiagnosticSignWarn", text = "⚠", texthl = "DiagnosticSignWarn" },
-  { name = "DiagnosticSignInfo", text = "ℹ", texthl = "DiagnosticSignInfo" },
-  { name = "DiagnosticSignHint", text = "→", texthl = "DiagnosticSignHint" },
-}
-
-for _, sign in ipairs(signs) do
-  vim.fn.sign_define(sign.name, {
-    texthl = sign.name,
-    text = sign.text,
-    numhl = ""
-  })
-end
+vim.api.nvim_set_hl(0, 'DiagnosticWarn',  { fg = '#ffaa00' })
+vim.api.nvim_set_hl(0, 'DiagnosticInfo',  { fg = '#00aaff' })
+vim.api.nvim_set_hl(0, 'DiagnosticHint',  { fg = '#ffffff' })
 EOF
 
 hi MatchParen cterm=bold ctermfg=lightgrey ctermbg=NONE gui=bold guifg=#B0B0B0 guibg=NONE " Parenの色をわかりやすく
