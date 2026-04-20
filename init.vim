@@ -66,6 +66,7 @@ call plug#begin('~/.vim/plugged')
 	Plug 'unblevable/quick-scope' " 横移動をいい感じにする
 	Plug 'cohama/lexima.vim' " 閉じかっこ補完
 	Plug 'tomasr/molokai' " color thema
+	Plug 'eetann/editprompt.nvim' " editprompt 連携
 
 	" go
 	Plug 'mattn/vim-goimports', { 'for': 'go' }
@@ -304,6 +305,23 @@ vim.api.nvim_set_hl(0, 'DiagnosticError', { fg = '#ff0000' })
 vim.api.nvim_set_hl(0, 'DiagnosticWarn',  { fg = '#ffaa00' })
 vim.api.nvim_set_hl(0, 'DiagnosticInfo',  { fg = '#00aaff' })
 vim.api.nvim_set_hl(0, 'DiagnosticHint',  { fg = '#ffffff' })
+
+-- editprompt.nvim -------------------------------------------------
+if pcall(require, 'editprompt') then
+  require('editprompt').setup({})
+  local map = function(mode, lhs, rhs)
+    vim.keymap.set(mode, lhs, rhs, { silent = true, noremap = true })
+  end
+  map('n', '<Space>ei', '<Cmd>Editprompt input --auto-send<CR>')
+  map('n', '<Space>eI', '<Cmd>Editprompt input<CR>')
+  map('x', '<Space>ei', '<Cmd>Editprompt input --visual --auto-send<CR>')
+  map('n', '<Space>ep', '<Cmd>Editprompt history prev<CR>')
+  map('n', '<Space>en', '<Cmd>Editprompt history next<CR>')
+  map('n', '<Space>ed', '<Cmd>Editprompt dump<CR>')
+  map('n', '<Space>es', '<Cmd>Editprompt stash pop<CR>')
+  map('n', '<Space>eS', '<Cmd>Editprompt stash push<CR>')
+  map('n', '<Space>ek', '<Cmd>Editprompt press_mode<CR>')
+end
 EOF
 
 hi MatchParen cterm=bold ctermfg=lightgrey ctermbg=NONE gui=bold guifg=#B0B0B0 guibg=NONE " Parenの色をわかりやすく
