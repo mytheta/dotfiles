@@ -2,7 +2,7 @@ sync:
 	curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 	mkdir -p ~/.config/git
 	mkdir -p ~/.config/nvim
-	[ -f ~/.config/nvim/init.vim ] || ln -s $(PWD)/init.vim ~/.config/nvim/init.vim
+	[ -f ~/.config/nvim/init.lua ] || ln -s $(PWD)/init.lua ~/.config/nvim/init.lua
 	[ -f ~/.vimrc ] || ln -s $(PWD)/.vimrc ~/.vimrc
 	ln -s ~/.config/nvim ~/.vim
 	[ -f ~/.ideavimrc ] || ln -s $(PWD)/.ideavimrc ~/.ideavimrc
@@ -18,6 +18,8 @@ sync:
 	[ -f ~/.aqua/global/.aqua.yaml ] || ln -s $(PWD)/aqua.yaml ~/.aqua/global/.aqua.yaml
 
 clean:
+	rm -f ~/.config/nvim/init.lua
+	rm -f ~/.config/nvim/init.vim
 	rm -f ~/.vimrc
 	rm -f ~/.ideavimrc
 	rm -f ~/.bashrc
