@@ -77,7 +77,7 @@ call plug#begin('~/.vim/plugged')
   " etc
   Plug 'tpope/vim-commentary'
   Plug 'unblevable/quick-scope'
-  Plug 'cohama/lexima.vim'
+  Plug 'windwp/nvim-autopairs'
   Plug 'tomasr/molokai'
 
   " languages
@@ -248,6 +248,8 @@ vim.api.nvim_create_autocmd('LspAttach', {
   end,
 })
 
+require('nvim-autopairs').setup({})
+
 local cmp = require('cmp')
 cmp.setup({
   snippet = {
@@ -264,6 +266,7 @@ cmp.setup({
     { name = 'nvim_lsp' },
   },
 })
+cmp.event:on('confirm_done', require('nvim-autopairs.completion.cmp').on_confirm_done())
 
 require('actions-preview').setup({
   backend = { 'telescope', 'nui' },
