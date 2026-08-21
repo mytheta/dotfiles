@@ -1,6 +1,6 @@
 [user]
 	name = yutsuki miyashita
-	email = yutsukimiya@gmail.com
+	email = 18681959+mytheta@users.noreply.github.com
 [ghq]
     root = ~/dev/src
 [commit]
@@ -33,3 +33,5 @@
         insteadOf = https://github.com/
 [init]
 	defaultBranch = main
+[url "https://x-access-token:@github.com/"]
+	insteadOf = https://github.com/

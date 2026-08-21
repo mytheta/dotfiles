@@ -1,0 +1,81 @@
+# mise - Declarative CLI Version Manager
+# https://mise.jdx.dev/
+# ~/.config/mise/config.toml にシンボリックリンクしてグローバル設定として使う。
+#
+# ツール名の付け方:
+#   - mise のレジストリに短縮名があるものはそれを使う（内部的には aqua backend）。
+#   - 短縮名が無いものは `aqua:<owner>/<repo>` で aqua レジストリを直接指定する。
+
+[settings]
+# .go-version / .node-version などの他ツール用バージョンファイルを mise に
+# 解釈させない（nodenv / pyenv / nvm と競合するため）。
+idiomatic_version_file_enable_tools = []
+
+[tools]
+# Git/GitHub
+gh = "2.89.0"
+ghq = "1.10.1"
+git-chglog = "0.15.4"
+hub = "2.14.2"
+
+# Kubernetes
+kubectl = "1.35.3"
+kubectx = "0.11.0"
+helm = "4.1.4"
+kustomize = "5.8.1"
+k9s = "0.50.18"
+eksctl = "0.225.0"
+
+# Terraform
+tfenv = "3.0.0"
+tflint = "0.61.0"
+tfsec = "1.28.14"
+tfmigrate = "0.4.4"
+
+# Go tools
+go = "1.26.2"
+task = "3.49.1"
+golangci-lint = "2.11.4"
+buf = "1.67.0"
+ko = "0.18.1"
+staticcheck = "2026.1"
+yamlfmt = "0.21.0"
+tbls = "1.94.4"
+protoc-gen-go = "1.36.11"
+protoc-gen-go-grpc = "1.6.1"
+"aqua:grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway" = "2.28.0"
+"aqua:grpc-ecosystem/grpc-gateway/protoc-gen-openapiv2" = "2.28.0"
+"aqua:incu6us/goimports-reviser" = "3.12.6"
+"aqua:cloudspannerecosystem/yo" = "0.8.1"
+# aqua レジストリ上で go_install 型のものは aqua backend が非対応なので go backend を使う
+"go:go.uber.org/mock/mockgen" = "0.6.0"
+"go:github.com/google/wire/cmd/wire" = "0.7.0"
+"go:github.com/go-delve/delve/cmd/dlv" = "1.26.1"
+"go:golang.org/x/tools/cmd/goimports" = "0.44.0"
+"go:golang.org/x/tools/gopls" = "0.21.1"
+"go:github.com/cloudspannerecosystem/spanner-cli" = "0.11.2"
+
+# General CLI
+bat = "0.26.1"
+# eza はlibgit2依存のためbrewで管理
+fzf = "0.71.0"
+jq = "1.8.1"
+yq = "4.52.5"
+ripgrep = "15.1.0"
+direnv = "2.37.1"
+starship = "1.24.2"
+shellcheck = "0.11.0"
+hadolint = "2.14.0"
+glow = "2.1.2"
+hugo = "0.160.1"
+doctl = "1.154.0"
+circleci-cli = "0.1.34950"
+peco = "0.6.0"
+duf = "0.9.1"
+pinact = "3.9.0"
+awscli = "2.34.29"
+pnpm = "10.33.0"
+atlas = "1.2.0"
+"aqua:neovim/neovim" = "0.12.1"     # 短縮名 neovim は vfox backend が既定なので aqua を明示
+"aqua:bcicen/slackcat" = "1.7.3"
+"aqua:context-labs/mactop" = "0.2.7"

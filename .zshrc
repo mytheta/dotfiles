@@ -2,12 +2,18 @@
 #    INIT
 # =============
 #
-# aqua - CLIツールのバージョン管理
-export AQUA_ROOT_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/aquaproj-aqua"
-export AQUA_GLOBAL_CONFIG="$HOME/.aqua/global/.aqua.yaml"
-export PATH="${AQUA_ROOT_DIR}/bin:$PATH"
+# mise - CLIツールのバージョン管理
+# mise 本体は ~/.local/bin。shims を PATH に入れておくと、tmux run-shell や
+# yabai のスクリプトのような非インタラクティブ環境からもツールを解決できる。
+export PATH="$HOME/.local/bin:${XDG_DATA_HOME:-$HOME/.local/share}/mise/shims:$PATH"
 
+# .zsh_private が direnv などの mise 管理ツールを使うので shims の後に読む
 [ -r ~/.zsh_private ] && source ~/.zsh_private
+
+# .zsh_private が GOPATH/bin などを前置きするので、activate はその後に実行して
+# mise 管理のバージョンを最優先にする
+eval "$(mise activate zsh)"
+
 setopt +o nomatch
 
 
@@ -133,3 +139,10 @@ export LSCOLORS=DxGxcxdxCxegedabagacad
 export NVM_DIR="$HOME/.config/nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# bun completions
+[ -s "/Users/yutsuki/.bun/_bun" ] && source "/Users/yutsuki/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"

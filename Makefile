@@ -14,8 +14,11 @@ sync:
 	[ -f ~/.git_commit ] || ln -s $(PWD)/git/.git_commit ~/.git_commit
 	[ -f ~/.config/git/ignore ] || ln -s $(PWD)/git/.gitignore_global ~/.config/git/ignore
 	[ -f ~/.config/starship.toml ] || ln -s $(PWD)/starship.toml ~/.config/starship.toml
-	mkdir -p ~/.aqua/global
-	[ -f ~/.aqua/global/.aqua.yaml ] || ln -s $(PWD)/aqua.yaml ~/.aqua/global/.aqua.yaml
+	mkdir -p ~/.config/mise
+	[ -f ~/.config/mise/config.toml ] || ln -s $(PWD)/mise.toml ~/.config/mise/config.toml
+	mkdir -p ~/.config/yabai
+	[ -f ~/.config/yabai/yabairc ] || ln -s $(PWD)/yabai/yabairc ~/.config/yabai/yabairc
+	[ -f ~/.config/yabai/gate-builtin.sh ] || ln -s $(PWD)/yabai/gate-builtin.sh ~/.config/yabai/gate-builtin.sh
 
 clean:
 	rm -f ~/.config/nvim/init.lua
@@ -33,11 +36,19 @@ clean:
 	rm -f ~/.git_commit
 	rm -f ~/.gitconfig
 	rm -rf ~/.vim
-	rm -f ~/.aqua/global/.aqua.yaml
+	rm -f ~/.config/mise/config.toml
+	rm -f ~/.config/yabai/yabairc
+	rm -f ~/.config/yabai/gate-builtin.sh
 
 brew:
 	brew bundle
 
+# mise 本体は brew ではなく公式インストーラで ~/.local/bin へ入れる
+# (brew 版と二重に入ると PATH 解決が読みにくくなるため)
+mise:
+	command -v mise >/dev/null || curl https://mise.run | sh
+	mise install
+
 setup: clean sync
 
-.PHONY: clean sync brew
+.PHONY: clean sync brew mise

@@ -56,7 +56,7 @@ call plug#begin('~/.vim/plugged')
 	Plug 'tpope/vim-fugitive' " status barにgit branchを表示させるため
 
 	" git
-	Plug 'tyru/open-browser.vim', { 'on': ['OpenBrowser', 'OpenBrowserSmartSearch'] }
+	Plug 'tyru/open-browser.vim', { 'on': ['OpenBrowser', 'OpenBrowserSmartSearch', 'OpenGithubFile', 'OpenGithubPullReq', 'OpenGithubIssue', 'OpenGithubProject'] }
 	Plug 'tyru/open-browser-github.vim', { 'on': ['OpenGithubFile', 'OpenGithubPullReq', 'OpenGithubIssue', 'OpenGithubProject'] }
 	Plug 'airblade/vim-gitgutter'
 	Plug 'iberianpig/tig-explorer.vim', { 'on': ['TigStatus', 'TigOpenCurrentFile', 'TigOpenProjectRootDir', 'TigBlame', 'TigGrep'] } " vimからtigを開く

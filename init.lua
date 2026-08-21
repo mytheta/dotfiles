@@ -69,7 +69,7 @@ call plug#begin('~/.vim/plugged')
   Plug 'tpope/vim-fugitive'
 
   " git
-  Plug 'tyru/open-browser.vim',        { 'on': ['OpenBrowser', 'OpenBrowserSmartSearch'] }
+  Plug 'tyru/open-browser.vim',        { 'on': ['OpenBrowser', 'OpenBrowserSmartSearch', 'OpenGithubFile', 'OpenGithubPullReq', 'OpenGithubIssue', 'OpenGithubProject'] }
   Plug 'tyru/open-browser-github.vim', { 'on': ['OpenGithubFile', 'OpenGithubPullReq', 'OpenGithubIssue', 'OpenGithubProject'] }
   Plug 'airblade/vim-gitgutter'
   Plug 'iberianpig/tig-explorer.vim',  { 'on': ['TigStatus', 'TigOpenCurrentFile', 'TigOpenProjectRootDir', 'TigBlame', 'TigGrep'] }
@@ -225,9 +225,21 @@ vim.lsp.config('rust_analyzer', {
   },
 })
 
+vim.lsp.config('pyright', {
+  settings = {
+    python = {
+      analysis = {
+        autoSearchPaths = true,
+        useLibraryCodeForTypes = true,
+        diagnosticMode = 'openFilesOnly',
+      },
+    },
+  },
+})
+
 require('mason').setup()
 require('mason-lspconfig').setup({
-  ensure_installed = { 'gopls', 'rust_analyzer' },
+  ensure_installed = { 'gopls', 'rust_analyzer', 'pyright' },
   automatic_enable = true,   -- インストール済みサーバーを vim.lsp.enable で自動有効化
 })
 
