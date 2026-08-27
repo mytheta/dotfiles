@@ -16,7 +16,6 @@ idiomatic_version_file_enable_tools = []
 gh = "2.103.3"
 ghq = "1.11.2"
 git-chglog = "0.15.4"
-hub = "2.14.2"
 
 # Kubernetes
 kubectl = "1.37.2"
