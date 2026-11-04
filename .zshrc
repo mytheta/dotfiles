@@ -41,7 +41,9 @@ setopt EXTENDED_HISTORY
 #    TMUX
 # ===================
 #tmux起動
-[[ -z "$TMUX" && ! -z "$PS1" ]] && tmux -u
+# SSH接続時は起動しない（クライアント側で既にtmuxを使っているため、
+# ここで起動するとtmuxが入れ子になる）
+[[ -z "$TMUX" && ! -z "$PS1" && -z "$SSH_CONNECTION" ]] && tmux -u
 
 #tmuxでemacsのキーバインド
 bindkey -e
@@ -146,3 +148,6 @@ export NVM_DIR="$HOME/.config/nvm"
 # bun
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
+# zsh-syntax-highlighting (brew install zsh-syntax-highlighting)。.zshrc の末尾で読み込む必要がある
+[[ -f /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]] && \
+  source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
