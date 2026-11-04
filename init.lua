@@ -2,7 +2,7 @@
 -- settings
 -- ============================================================
 vim.opt.lazyredraw = true                   -- fast
-vim.opt.clipboard = 'unnamedplus'           -- macのクリップボードとyankを共有
+vim.opt.clipboard = 'unnamedplus'           -- yankをクリップボードと共有
 vim.opt.showmatch = true                    -- 括弧移動
 vim.opt.matchtime = 1                       -- 時間短縮
 vim.opt.shiftwidth = 4
@@ -13,6 +13,36 @@ vim.opt.swapfile = false
 vim.opt.number = true                       -- 行番号の表示
 vim.opt.ruler = false                       -- 右下に表示されるやつを消す
 vim.opt.visualbell = true                   -- ビープ音を消す
+
+-- yank は常に OSC 52 で「手元の端末」のクリップボードへ送る(ssh 越しでも届く)
+-- SSH_TTY 等で判定すると、ローカルで起動した tmux に ssh から attach した場合に
+-- 環境変数が引き継がれず pbcopy に落ちてしまうので、判定せず常に送る
+-- 加えて pbcopy にも入れておき、paste は pbpaste から読む(OSC 52 の読み出しはほぼ非対応)
+do
+  local osc52 = require('vim.ui.clipboard.osc52')
+  local has_pb = vim.fn.executable('pbcopy') == 1
+  local function copy(reg)
+    local send = osc52.copy(reg)
+    return function(lines, regtype)
+      send(lines, regtype)
+      if has_pb then vim.fn.system('pbcopy', table.concat(lines, '\n')) end
+    end
+  end
+  local function paste()
+    local reg = vim.fn.getreg('"')
+    if has_pb then
+      local text = vim.fn.system('pbpaste')
+      -- 自分で yank した内容ならレジスタタイプ(行単位/矩形など)も復元する
+      if text ~= reg:gsub('\n$', '') then return vim.split(text, '\n') end
+    end
+    return { vim.split(reg, '\n'), vim.fn.getregtype('"') }
+  end
+  vim.g.clipboard = {
+    name = 'OSC 52 + pbcopy',
+    copy = { ['+'] = copy('+'), ['*'] = copy('*') },
+    paste = { ['+'] = paste, ['*'] = paste },
+  }
+end
 
 -- paste時にyankしない
 vim.keymap.set('x', 'p', function()
@@ -28,8 +58,10 @@ vim.api.nvim_create_autocmd('CursorHold', {
   command = 'checktime',
 })
 
--- 開いてる絶対pathをコピー
-vim.keymap.set('n', '<Space>c', ':silent !echo %:p | pbcopy<CR>', { silent = true })
+-- 開いてる絶対pathをコピー (クリップボードレジスタ経由なので ssh 先でも手元に届く)
+vim.keymap.set('n', '<Space>c', function()
+  vim.fn.setreg('+', vim.fn.expand('%:p'))
+end, { silent = true })
 
 -- ============================================================
 -- vim-plug
@@ -100,7 +132,7 @@ vim.env.FZF_DEFAULT_COMMAND = "rg --files --hidden -g '!.git/**' -g '!bazel-serv
 -- ============================================================
 vim.cmd([[
 function! FZGrep(query, fullscreen)
-  let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case -- %s || true'
+  let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case --hidden -g "!.git/**" -- %s || true'
   let initial_command = printf(command_fmt, shellescape(a:query))
   let reload_command = printf(command_fmt, '{q}')
   let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
@@ -226,6 +258,22 @@ vim.lsp.config('rust_analyzer', {
 })
 
 vim.lsp.config('pyright', {
+  -- pyright は PATH の python を見るため、放置すると pyenv の global 環境を参照して
+  -- サードパーティ製 import が全て解決不能になる。root_dir 配下の venv を明示的に渡す。
+  before_init = function(_, config)
+    local root = config.root_dir or vim.fn.getcwd()
+    local candidates = { root .. '/.venv/bin/python', vim.env.VIRTUAL_ENV and (vim.env.VIRTUAL_ENV .. '/bin/python') }
+    for _, python in ipairs(candidates) do
+      if python and vim.fn.executable(python) == 1 then
+        -- config.settings 自体を差し替えると client.settings の参照が古いままになるので、
+        -- 既存テーブルの python キーを in-place で書き換える
+        config.settings = config.settings or {}
+        config.settings.python =
+          vim.tbl_deep_extend('force', config.settings.python or {}, { pythonPath = python })
+        return
+      end
+    end
+  end,
   settings = {
     python = {
       analysis = {
@@ -237,9 +285,51 @@ vim.lsp.config('pyright', {
   },
 })
 
+vim.lsp.config('vtsls', {
+  settings = {
+    complete_function_calls = true,
+    vtsls = {
+      enableMoveToFileCodeAction = true,
+      autoUseWorkspaceTsdk = true,      -- プロジェクトの node_modules/typescript を使う
+      experimental = {
+        completion = { enableServerSideFuzzyMatch = true },
+      },
+    },
+    typescript = {
+      updateImportsOnFileMove = { enabled = 'always' },
+      suggest = { completeFunctionCalls = true },
+      preferences = { importModuleSpecifier = 'shortest' },
+      inlayHints = {
+        parameterNames = { enabled = 'literals' },
+        parameterTypes = { enabled = true },
+        functionLikeReturnTypes = { enabled = true },
+      },
+    },
+    javascript = {
+      updateImportsOnFileMove = { enabled = 'always' },
+      preferences = { importModuleSpecifier = 'shortest' },
+    },
+  },
+})
+
+-- eslint: 保存時に --fix (eslint 設定のあるプロジェクトでのみ起動する)
+vim.api.nvim_create_autocmd('LspAttach', {
+  group = vim.api.nvim_create_augroup('dotfiles_eslint_fix', { clear = true }),
+  callback = function(args)
+    local client = vim.lsp.get_client_by_id(args.data.client_id)
+    if not client or client.name ~= 'eslint' then
+      return
+    end
+    vim.api.nvim_create_autocmd('BufWritePre', {
+      buffer = args.buf,
+      command = 'LspEslintFixAll',
+    })
+  end,
+})
+
 require('mason').setup()
 require('mason-lspconfig').setup({
-  ensure_installed = { 'gopls', 'rust_analyzer', 'pyright' },
+  ensure_installed = { 'gopls', 'rust_analyzer', 'pyright', 'vtsls', 'eslint' },
   automatic_enable = true,   -- インストール済みサーバーを vim.lsp.enable で自動有効化
 })
 
