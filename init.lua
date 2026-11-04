@@ -106,6 +106,11 @@ call plug#begin('~/.vim/plugged')
   Plug 'airblade/vim-gitgutter'
   Plug 'iberianpig/tig-explorer.vim',  { 'on': ['TigStatus', 'TigOpenCurrentFile', 'TigOpenProjectRootDir', 'TigBlame', 'TigGrep'] }
 
+  " markdown preview (nvim 0.12+, kitty graphics protocol 対応ターミナル推奨)
+  Plug 'nvim-tree/nvim-web-devicons'
+  Plug 'delphinus/budoux.lua'
+  Plug 'delphinus/md-render.nvim'
+
   " etc
   Plug 'tpope/vim-commentary'
   Plug 'unblevable/quick-scope'
@@ -197,6 +202,10 @@ vim.api.nvim_create_autocmd('VimEnter', {
 
 -- tig
 vim.keymap.set('n', 'tt', ':TigStatus<CR>', { silent = true })
+
+-- md-render (markdown プレビュー)
+vim.keymap.set('n', '<Space>m', '<Plug>(md-render-preview)')
+vim.keymap.set('n', '<Space>M', '<Plug>(md-render-preview-tab)')
 
 -- ============================================================
 -- highlights (半透明化 + cursor)
