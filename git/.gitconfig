@@ -35,3 +35,5 @@
 	defaultBranch = main
 [url "https://x-access-token:@github.com/"]
 	insteadOf = https://github.com/
+[core]
+	quotepath = false
